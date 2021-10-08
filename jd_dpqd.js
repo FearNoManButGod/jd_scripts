@@ -352,7 +352,6 @@ function requireConfig() {
 		await $.wait(1000)
 		$.token = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_shopToken.json')
 	}
-  $.token = JSON.parse( $.token )
 	console.log($.token)
     console.log(`您提供了${$.token.length}个店铺签到活动Token\n`);
     resolve()
