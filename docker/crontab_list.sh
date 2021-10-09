@@ -32,6 +32,10 @@
 17 12-23/4 * * * node /scripts/jd_ddgame.js >> /scripts/logs/jd_ddgame.log 2>&1
 #京东小魔方
 5 2,8 * * * node /scripts/jd_mf.js >> /scripts/logs/jd_mf.log 2>&1
+#一加 9RT新品发布
+48 11 * * * node /scripts/jd_yijia.js >> /scripts/logs/jd_yijia.log 2>&1
+#瓜分海尔万元小家电
+48 11 * * * node /scripts/jd_haier.js >> /scripts/logs/jd_haier.log 2>&1
 ##############长期活动##############
 # 签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
