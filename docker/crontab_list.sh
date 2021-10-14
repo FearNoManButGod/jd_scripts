@@ -149,3 +149,7 @@
 11 0,9 * * * node /scripts/jd_zsign.js >> /scripts/logs/jd_zsign.log 2>&1
 #京东保价
 41 0,12,23 * * * node /scripts/jd_price.js >> /scripts/logs/jd_price.log 2>&1
+#京东工业品
+13 5,16 * * * node /scripts/jd_industrial_task.js >> /scripts/logs/jd_industrial_task.log 2>&1
+#东东世界兑换
+59 23 * * * node /scripts/jd_ddworld_exchange.js >> /scripts/logs/jd_ddworld_exchange.log 2>&1
