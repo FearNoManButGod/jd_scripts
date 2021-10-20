@@ -51,6 +51,8 @@ $.shareCodesArr = [];
       await getInviteId();
     }
   }
+
+
   if(Object.getOwnPropertyNames($.inviteIdCodesArr).length > 0){
     for (let i = 0; i < cookiesArr.length && true; i++) {
       if (cookiesArr[i]) {
@@ -339,12 +341,13 @@ function readShareCode() {
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
-    // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
+    
+    
     $.newShareCodes = [];
     if ($.shareCodesArr[$.index - 1]) {
       $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
     }
-    if($.index == 1) $.newShareCodes = [...inviteCodes,...$.newShareCodes]
+    $.newShareCodes = [...inviteCodes,...$.newShareCodes]
     // try{
       // const readShareCodeRes = await readShareCode();
       // if (readShareCodeRes && readShareCodeRes.code === 200) {
