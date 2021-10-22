@@ -28,7 +28,7 @@ let helpPool = $.isNode() ? (process.env.JD_CITY_HELPPOOL === "false" ? false : 
 let cookiesArr = [], cookie = '', message;
 let uuid;
 $.shareCodes = []
-let inviteCodes = 'RtGKzeWgFQv2K9LIRoJnhaxwZNiR3kZKcFx6N3h5uGMMB9XNYQ';
+
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -38,7 +38,7 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let inviteCodes = []
+let inviteCodes = 'RtGKzeWgFQv2K9LIRoJnhaxwZNiR3kZKcFx6N3h5uGMMB9XNYQ';
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
