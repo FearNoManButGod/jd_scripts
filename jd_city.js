@@ -38,7 +38,7 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let inviteCodes = 'RtGKzeWgFQv2K9LIRoJnhaxwZNiR3kZKcFx6N3h5uGMMB9XNYQ';
+let inviteCodes = ['RtGKzeWgFQv2K9LIRoJnhaxwZNiR3kZKcFx6N3h5uGMMB9XNYQ'];
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -101,8 +101,6 @@ let inviteCodes = 'RtGKzeWgFQv2K9LIRoJnhaxwZNiR3kZKcFx6N3h5uGMMB9XNYQ';
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
     $.index = i + 1;
     uuid = randomString(40);
-
-    await getInfo(inviteCodes)
     if (helpPool) {
       for (let j = 0; j < $.readShareCode.length; j++) {
         console.log(`\n${$.UserName} 开始助力 助力池 【${$.readShareCode[j]}】`)
@@ -426,11 +424,12 @@ function shareCodesFormat() {
     // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
     $.newShareCodes = [];
     const readShareCodeRes = await readShareCode();
-    $.readShareCode = (readShareCodeRes && readShareCodeRes.data) || []
+    $.SharCode = (readShareCodeRes && readShareCodeRes.data) || []
+    $.readShareCode = [...new Set([...inviteCodes, ...$.SharCode])];
     if (readShareCodeRes && readShareCodeRes.code === 200) {
-      $.newShareCodes = [...new Set([...$.shareCodes, ...inviteCodes, ...$.readShareCode])];
+      $.newShareCodes = [...new Set([...inviteCodes, ...$.shareCodes, ...$.readShareCode])];
     } else {
-      $.newShareCodes = [...new Set([...$.shareCodes, ...inviteCodes])];
+      $.newShareCodes = [...new Set([...inviteCodes, ...$.shareCodes])];
     }
     console.log(`\n您将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
