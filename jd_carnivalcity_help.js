@@ -291,7 +291,7 @@ function shareCodesFormat() {
   })
 }
 function requireConfig() {
-  return new Promise(resolve => {
+  return new Promise(async resolve => {
     console.log(`开始获取${$.name}配置文件\n`);
     $.updatePkActivityIdRes = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/d_carnivalcityShareCodes.json')
     if (!$.updatePkActivityIdRes) {
