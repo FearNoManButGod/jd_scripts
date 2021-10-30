@@ -121,17 +121,12 @@ function wb(round,rowIdx,colIdx) {
     url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${fcwbroud},"rowIdx":${rowIdx},"colIdx":${colIdx},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
    
     headers: {
-
         "Cookie": cookie,
         "Origin": "https://api.m.jd.com",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-
     }
   }
-  
-  
   $.get(nm, async (err, resp, data) => {
-
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
