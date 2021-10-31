@@ -361,7 +361,7 @@ function help(inviteCode,markedPin) {
                console.log('助力：'+data.errMsg)  
              }else if(data.success==false){
                 console.log('助力：'+data.errMsg)
-                if(){
+                if(data.code === 16144){
                   $.isHelp = false;
                 }
             
