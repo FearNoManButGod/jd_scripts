@@ -1,4 +1,10 @@
-const $ = new Env('搞基大神-发财挖宝help');
+/*
+活动入口： 京东极速版-我的-发财挖宝
+
+cron "20 10-22/2 * * *" script-path=jd_fcwb.js tag=发财挖宝
+
+ */
+const $ = new Env('发财挖宝');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
