@@ -357,7 +357,6 @@ function help(inviteCode,markedPin) {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            console.log(data);
              if(data.success==true){
                console.log('助力：'+data.errMsg)  
              }else if(data.success==false){
