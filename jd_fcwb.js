@@ -70,21 +70,30 @@ if ($.isNode()) {
     }
 
     for (let i = 0; i < cookiesArr.length; i++) {
+      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+      $.isHelp = true;
       if (!fcwbCode) {
         for (let i = 0; i < $.inviteCode.length; i++) {
           const element = $.inviteCode[i];
-          console.log(`去助力${element}`);
+          console.log(`${$.UserName}去助力${element}`);
           await help(element.split("@")[0], element.split("@")[1])
           await $.wait(3000);
+          if(!$.isHelp){
+            console.log("助力次数已满，跳出");
+            break;
+          }
         }
       } else {
           fcwbHelp = fcwbCode.split("&");
           for (let i = 0; i < fcwbHelp.length; i++) {
             const element = fcwbHelp[i];
-            console.log(`去助力${element}`);
+            console.log(`${$.UserName}去助力${element}`);
             await help(element.split("@")[0], element.split("@")[1])
             await $.wait(3000);
-
+            if(!$.isHelp){
+              console.log("助力次数已满，跳出");
+              break;
+            }
           }
       }
     }
@@ -351,7 +360,12 @@ function help(inviteCode,markedPin) {
              if(data.success==true){
                console.log('助力：'+data.errMsg)  
              }else if(data.success==false){
-             console.log('助力：'+data.errMsg)}
+                console.log('助力：'+data.errMsg)
+                if(){
+                  $.isHelp = false;
+                }
+            
+            }
           }
         }
       } catch (e) {
