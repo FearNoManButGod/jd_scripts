@@ -71,7 +71,6 @@ if ($.isNode()) {
 
     for (let i = 0; i < cookiesArr.length; i++) {
       if (!fcwbCode) {
-        console.log(`环境变量中没有检测到助力码,进行内部助力`)
         for (let i = 0; i < $.inviteCode.length; i++) {
           const element = $.inviteCode[i];
           console.log(`去助力${element}`);
@@ -79,7 +78,6 @@ if ($.isNode()) {
           await $.wait(3000);
         }
       } else {
-        console.log(`环境变量中检测到助力码,进行指定助力`)
           fcwbHelp = fcwbCode.split("&");
           for (let i = 0; i < fcwbHelp.length; i++) {
             const element = fcwbHelp[i];
