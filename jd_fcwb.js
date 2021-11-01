@@ -158,7 +158,6 @@ function TaskList(){
                         console.log(`请手动去京东极速版-我的-发财挖宝做${vo.taskShowTitle}任务,可增加三滴生命值！我是菜鸟搞不懂sign算法,无法自动进行。`);
                         //await apTaskDetail(vo.id,$.needDoTimes);
                       }
-                      
                     }
 
                   }
