@@ -12,7 +12,7 @@ const fcwbCode = $.isNode() ? (process.env.fcwbCode ? process.env.fcwbCode : nul
 const JD_API_HOST = 'https://api.m.jd.com';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
-$.inviteCode = ["b293d8495a884ef3b2b80be21df5260571671635618965557@xlOvyZbXqs0mu_R2jZ0fdqu9XpGJJ-oWRMA39Czna48"];
+$.inviteCode = ["8fae7c6eed544a2ea066c50a4150d03675961635725769674@xlOvyZbXqs0mu_R2jZ0fdqu9XpGJJ-oWRMA39Czna48"];
 
 
 
