@@ -135,7 +135,7 @@ function TaskList(){
                   console.log(`去做发财挖宝浏览任务`);
                   for (let key of Object.keys(data.data)) {
                     let vo = data.data[key];
-                    if(vo.id === 360){
+                    if(vo.taskShowTitle == "玩一玩得奖励"){
                       $.taskLimitTimes = vo.taskLimitTimes;
                       $.taskDoTimes = vo.taskDoTimes;
                       $.needDoTimes = $.taskLimitTimes - $.taskDoTimes;
@@ -147,7 +147,7 @@ function TaskList(){
                         await BROWSE_CHANNEL(vo.id,vo.taskSourceUrl);
                       }
                     }
-                    if(vo.id=== 357){
+                    if(vo.taskShowTitle == "逛会场得生命值"){
                       $.taskLimitTimes = vo.taskLimitTimes;
                       $.taskDoTimes = vo.taskDoTimes;
                       $.needDoTimes = $.taskLimitTimes - $.taskDoTimes;
