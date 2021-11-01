@@ -53,7 +53,7 @@ if ($.isNode()) {
       await home();
       if($.blood>1){
         for (let i = 0; i <  $.chunks.length ; i++) {
-            console.log(`挖宝${i}次`) 
+            console.log(`挖宝${i+1}次`) 
             await $.wait(3000);
             chunks = $.chunks[Math.floor(Math.random() * $.chunks.length)]
             console.log(chunks);
