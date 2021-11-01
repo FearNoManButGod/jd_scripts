@@ -111,7 +111,7 @@ if ($.isNode()) {
 function TaskList(){
   return new Promise((resolve) => {
     const nm= {
-        url: `${JD_API_HOST}/?functionId=apTaskList&body={"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+        url: `${JD_API_HOST}/?functionId=apTaskList&body={"linkId":"yCcpwTLIbY6pjaM42ACUVg"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
         headers: {
           "Accept": "application/json,text/plain, */*",
           "Accept-Encoding": "gzip, deflate, br",
@@ -119,7 +119,7 @@ function TaskList(){
           "Connection": "keep-alive",
           "Cookie": cookie,
           "Host": "api.m.jd.com",
-          "Origin": "https://bnzf.jd.com/?activityId=SS55rTBOHtnLCm3n9UMk7Q",
+          "Origin": "https://bnzf.jd.com/?activityId=yCcpwTLIbY6pjaM42ACUVg",
           "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
         }
       }
@@ -192,7 +192,7 @@ function TaskList(){
 function wb(chunks) {
  return new Promise((resolve) => {
     const nm= {
-        url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${$.curRound},"rowIdx":${chunks.split(",")[0]},"colIdx":${chunks.split(",")[1]},"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+        url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${$.curRound},"rowIdx":${chunks.split(",")[0]},"colIdx":${chunks.split(",")[1]},"linkId":"yCcpwTLIbY6pjaM42ACUVg"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
         headers: {
           "Accept": "application/json,text/plain, */*",
           "Accept-Encoding": "gzip, deflate, br",
@@ -200,7 +200,7 @@ function wb(chunks) {
           "Connection": "keep-alive",
           "Cookie": cookie,
           "Host": "api.m.jd.com",
-          "Origin": "https://bnzf.jd.com/?activityId=SS55rTBOHtnLCm3n9UMk7Q",
+          "Origin": "https://bnzf.jd.com/?activityId=yCcpwTLIbY6pjaM42ACUVg",
           "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
         }
       }
@@ -238,7 +238,7 @@ function wb(chunks) {
 }
 function home(flag=false) {
   return new Promise((resolve) => {
-    let body = {"linkId":"SS55rTBOHtnLCm3n9UMk7Q"}
+    let body = {"linkId":"yCcpwTLIbY6pjaM42ACUVg"}
     $.get(taskurl('happyDigHome',body), async (err, resp, data) => {
         try {
           if (err) {
@@ -309,7 +309,7 @@ function home(flag=false) {
 
 function BROWSE_CHANNEL(taskId,itemId) {
  return new Promise((resolve) => {
-  let body = {"linkId":"SS55rTBOHtnLCm3n9UMk7Q","taskType":"BROWSE_CHANNEL","taskId": taskId ,"channel": 4,"itemId": itemId ,"checkVersion":false};
+  let body = {"linkId":"yCcpwTLIbY6pjaM42ACUVg","taskType":"BROWSE_CHANNEL","taskId": taskId ,"channel": 4,"itemId": itemId ,"checkVersion":false};
   $.get(taskurl('apDoTask',body), async (err, resp, data) => {
       try {
         if (err) {
@@ -337,7 +337,7 @@ function BROWSE_CHANNEL(taskId,itemId) {
 function help(inviteCode,markedPin) {
   return new Promise((resolve) => {
   const nm= {
-    url: `${JD_API_HOST}/?functionId=happyDigHelp&body={"linkId":"SS55rTBOHtnLCm3n9UMk7Q","inviter":"${markedPin}","inviteCode":"${inviteCode}"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+    url: `${JD_API_HOST}/?functionId=happyDigHelp&body={"linkId":"yCcpwTLIbY6pjaM42ACUVg","inviter":"${markedPin}","inviteCode":"${inviteCode}"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
     headers: {
         "Accept": "application/json,text/plain, */*",
         "Accept-Encoding": "gzip, deflate, br",
@@ -345,7 +345,7 @@ function help(inviteCode,markedPin) {
         "Connection": "keep-alive",
         "Cookie": cookie,
         "Host": "api.m.jd.com",
-        "Origin": "https://bnzf.jd.com/?activityId=SS55rTBOHtnLCm3n9UMk7Q",
+        "Origin": "https://bnzf.jd.com/?activityId=yCcpwTLIbY6pjaM42ACUVg",
         "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
     }
   }     
@@ -455,7 +455,7 @@ function taskurl(functionId,body) {
         "Connection": "keep-alive",
         "Cookie": cookie,
         "Host": "api.m.jd.com",
-        "Origin": "https://bnzf.jd.com/?activityId=SS55rTBOHtnLCm3n9UMk7Q",
+        "Origin": "https://bnzf.jd.com/?activityId=yCcpwTLIbY6pjaM42ACUVg",
         "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
     }
   }
