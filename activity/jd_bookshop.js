@@ -29,10 +29,7 @@ let ADD_CART = false
 ADD_CART = $.isNode() ? (process.env.PURCHASE_SHOPS ? process.env.PURCHASE_SHOPS : ADD_CART) : ($.getdata("ADD_CART") ? $.getdata("ADD_CART") : ADD_CART);
 // 加入购物车开关，与东东小窝共享
 
-let inviteCodes = [
-  '6f46a1538969453d9a730ee299f2fc41@3ad242a50e9c4f2d9d2151aee38630b1@1a68165088b345c4ba2d8ce6464fa92b@bf4071c7fcde43828fddb83a08f53d28@abf5065d45e84851b972b37ac205e56a@3d9e58dbf2274db88afa177c7c2dccb0@341de42184724278b617e93a84d8bfff@195193ae706b477c9d232d38ec10fe03@41bee16aaa8d46cd86a5ca1efbabe156@9fd860599abf40ff819efc721a952dbc',
-  '6f46a1538969453d9a730ee299f2fc41@3ad242a50e9c4f2d9d2151aee38630b1@1a68165088b345c4ba2d8ce6464fa92b@bf4071c7fcde43828fddb83a08f53d28@abf5065d45e84851b972b37ac205e56a@3d9e58dbf2274db88afa177c7c2dccb0@341de42184724278b617e93a84d8bfff@195193ae706b477c9d232d38ec10fe03@41bee16aaa8d46cd86a5ca1efbabe156@9fd860599abf40ff819efc721a952dbc',
-]
+let inviteCodes = []
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -50,6 +47,12 @@ if ($.isNode()) {
     return;
   }
   $.shareCodesArr = []
+  $.authorCode = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/jd_bookshop.json')
+  if (!$.authorCode) {
+    $.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_bookshop.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
+    await $.wait(1000)
+    $.authorCode = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_bookshop.json') || []
+  }
   await requireConfig()
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
@@ -100,7 +103,7 @@ async function jdBeauty() {
     console.log(`金币大于800，去抽奖`)
     while ($.gold >= 800) {
       await draw()
-      await $.wait(2000)
+      await $.wait(1000)
       $.gold -= 800
     }
   }
@@ -114,7 +117,7 @@ async function helpFriends() {
     if (!code) continue
     console.log(`去助力好友${code}`)
     await getActContent(true, code)
-    await $.wait(2000)
+    await $.wait(500)
   }
 }
 
@@ -330,7 +333,7 @@ function getActContent(info = false, shareUuid = '') {
                       console.log(`去做${task.title}任务`)
                       for (let set of task.settings.filter(vo => vo.status === 0)) {
                         await doTask(set.type, set.value)
-                        await $.wait(2000)
+                        await $.wait(500)
                       }
                     }
                   } else if(task.title === '每日签到'){
@@ -340,14 +343,13 @@ function getActContent(info = false, shareUuid = '') {
                       for (let set of task.settings.filter(vo => vo.status === 0)) {
                         let res = await doTask(set.type, set.value)
                         if (res.result) break
-                        await $.wait(2000)
+                        await $.wait(500)
                       }
                     }
                   } else if (ADD_CART && ['加购商品'].includes(task.title)) {
                     if (task.okNum < task.dayMaxNum) {
                       console.log(`去做${task.title}任务`)
                       await doTask(task.settings[0].type, task.settings[0].value)
-                      await $.wait(2000)
                     }
                   }
                 }
@@ -691,21 +693,60 @@ function shareCodesFormat() {
   return new Promise(async resolve => {
     // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
     $.newShareCodes = [];
+	
     if ($.shareCodesArr[$.index - 1]) {
-      $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
+      /* $.newShareCodes = $.shareCodesArr[$.index - 1].split('@'); */
+	  $.newShareCodes = [...new Set([...($.authorCode || []),...$.shareCodesArr[$.index - 1].split('@')])];
+	  
     } else {
       console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
-      const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
-      $.newShareCodes = inviteCodes[tempIndex].split('@');
+      /* const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
+      $.newShareCodes = inviteCodes[tempIndex].split('@'); */
+	  $.newShareCodes = [...new Set([...$.newShareCodes, ...($.authorCode || [])])];
     }
-    const readShareCodeRes = null //await readShareCode();
+   /*  const readShareCodeRes = null //await readShareCode();
     if (readShareCodeRes && readShareCodeRes.code === 200) {
       $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
-    }
+    } */
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })
 }
+
+function getAuthorShareCode(url) {
+  return new Promise(resolve => {
+    const options = {
+      url: `${url}?${new Date()}`, "timeout": 10000, headers: {
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+      }
+    };
+    if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
+      const tunnel = require("tunnel");
+      const agent = {
+        https: tunnel.httpsOverHttp({
+          proxy: {
+            host: process.env.TG_PROXY_HOST,
+            port: process.env.TG_PROXY_PORT * 1
+          }
+        })
+      }
+      Object.assign(options, { agent })
+    }
+    $.get(options, async (err, resp, data) => {
+      try {
+        if (err) {
+        } else {
+          if (data) data = JSON.parse(data)
+        }
+      } catch (e) {
+        // $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+  })
+}
+
 function requireConfig() {
   return new Promise(resolve => {
     console.log(`开始获取${$.name}配置文件\n`);
