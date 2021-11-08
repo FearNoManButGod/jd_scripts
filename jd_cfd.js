@@ -51,7 +51,6 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 !(async () => {
-  await requireConfig();
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
@@ -85,6 +84,13 @@ if ($.isNode()) {
       await $.wait(2000);
     }
   }
+  let res = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/jd_cfd.json')
+  if (!res) {
+    $.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_cfd.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
+    await $.wait(1000)
+    res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_cfd.json')
+  }
+  $.strMyShareIds = [...(res && res.shareId || [])];	
   await shareCodesFormat()
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
@@ -1484,6 +1490,7 @@ function taskListUrl(function_path, body = '', bizCode = 'jxbfd') {
       "Host": "m.jingxi.com",
       "Accept": "*/*",
       "Accept-Encoding": "gzip, deflate, br",
+      "User-Agent": UA,
       "Accept-Language": "zh-CN,zh-Hans;q=0.9",
       "Referer": "https://st.jingxi.com/",
       "Cookie": cookie
@@ -1543,7 +1550,7 @@ function readShareCode() {
         resolve(data);
       }
     })
-    await $.wait(10000);
+    await $.wait(30 * 1000);
     resolve()
   })
 }
@@ -1577,38 +1584,24 @@ function uploadShareCode(code) {
         resolve(data);
       }
     })
-    await $.wait(10000);
+    await $.wait(30 * 1000);
     resolve()
   })
 }
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
-    
-    $.newShareCodes =  [...($.strMyShareIds || [])];
-    if ($.shareCodesArr[$.index - 1]) {
-      let helpShareCodes = $.shareCodesArr[$.index - 1].split('@');
-	  	helpShareCodes.forEach(element => {
-			if( $.newShareCodes.indexOf(element) == -1){
-			  $.newShareCodes.push(element);
-			}
-		})											
+    $.newShareCodes = []
+    const readShareCodeRes = await readShareCode();
+    if (readShareCodeRes && readShareCodeRes.code === 200) {
+      $.newShareCodes = [...new Set([...($.strMyShareIds || []), ...$.shareCodes, ...(readShareCodeRes.data || [])])];
     } else {
-      console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
-      // const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
-      $.newShareCodes = [...$.strMyShareIds];
+      $.newShareCodes = [...new Set([...($.strMyShareIds || []), ...$.shareCodes ])];
     }
-     const readShareCodeRes = await readShareCode();
-     if (readShareCodeRes && readShareCodeRes.code === 200) {
-      $.newShareCodes = [...new Set([...$.newShareCodes, ...$.shareCodes, ...(readShareCodeRes.data || [])])];
-      // $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
-     }
-    console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
+    console.log(`您将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })
 }
-
-
 
 function requireConfig() {
   return new Promise(async resolve => {
@@ -1633,18 +1626,16 @@ function requireConfig() {
       console.log(`\nBoxJs设置的京喜财富岛邀请码:${$.getdata('jd_jxCFD')}\n`);
     }
     console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
-	let res = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/jd_cfd.json')
-	if (!res) {
-		$.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_cfd.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
-		await $.wait(1000)
-		res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_cfd.json')
-	}
-	$.strMyShareIds = [...(res && res.shareId || [])];																 
+    let res = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/jd_cfd.json')
+    if (!res) {
+      $.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_cfd.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
+      await $.wait(1000)
+      res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_cfd.json')
+    }
+    $.strMyShareIds = [...(res && res.shareId || [])];																 
     resolve()
   })
 }
-
-
 
 function TotalBean() {
   return new Promise(resolve => {
