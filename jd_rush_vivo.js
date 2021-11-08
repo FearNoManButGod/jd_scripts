@@ -1,4 +1,5 @@
 /**
+ Phone狂心跳吧
 cron "0 1,2,23 * * *" script-path= jd_rush_vivo.js
 **/
 const $ = new Env("Phone");
