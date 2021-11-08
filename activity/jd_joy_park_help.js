@@ -1,21 +1,16 @@
 /*
-汪汪乐园每日助力
-更新时间：2021-7-7
-活动入口：京东极速版-赚金币-汪汪乐园
-靠前账号优先助力,建议晚上十一点半运行确保收益最大化
-30 23 * * * https://raw.githubusercontent.com/cdle/jd_study/main/jd_joy_park_help.js
+
+30 23 * * * jd_joy_park_help.js
 */
 const $ = Env("汪汪乐园每日助力")
 const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
 let cookiesArr = []
 let cookie = ''
-
-$.invitePin;
-$.helpInfo =[];
+let inviters = []
+let inviter = {};
 
 !(async () => {
-    await requireConfig();
-	
+    await requireConfig()
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {
             "open-url": "https://bean.m.jd.com/bean/signIndex.action"
@@ -41,23 +36,7 @@ $.helpInfo =[];
                 }
                 continue
             }
-			
-			 bashInfo = await requestApi("joyBaseInfo",{})
-			 if (!bashInfo?.data?.invitePin) continue
-			 console.log(`您的互助码：${bashInfo.data.invitePin}\n`);
-			 $.helpInfo.push(bashInfo.data.invitePin);
-  
-			
-			
-			
-			
-			
-			
-			/* inviter = inviters[0] ?? inviter
-            helpInfo = {}
-          */
-			
-            /* inviter = inviters[0] ?? inviter
+            inviter = inviters[0] ?? inviter
             helpInfo = {}
             bashInfo = await requestApi("joyBaseInfo",inviter ? {
                 taskId: "167" ,
@@ -100,100 +79,10 @@ $.helpInfo =[];
                         inviters.push(helpInfo)
                     }
                 }
-            }); */
+            });
         }
     }
-	console.log(`开始格式化助力码，进行助力。\n`);
-	await shareInviteFormat();
-	
-	 for (let i = 0; i < cookiesArr.length; i++) {
-        if (cookiesArr[i]) {
-            cookie = cookiesArr[i];
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-            $.index = i + 1;
-		    for(let j = 0; j < $.invitePin.length; j++){
-				console.log(`【京东账号${$.index}】\n开始为${$.invitePin[j]}进行助力\n`);
-				bashInfo = await requestApi("joyBaseInfo",{
-					taskId: "167" ,
-					inviteType:  '1',
-					inviterPin: $.invitePin[j],
-				})
-				if (bashInfo?.data?.helpState == 1) {
-				  console.log(`助力成功\n`);
-				  bonus = await requestApi("apTaskDrawAward",{
-                        taskId: "167" ,
-                        taskType:  'SHARE_INVITE',
-                  })
-                  if(bonus.success){
-                      console.log(`账号${$.index}领取${bonus.data[0].awardGivenNumber}工资`)
-                  }
-				  break;
-				}
-				if (bashInfo?.data?.helpState == 2) {
-				  console.log(`助力失败！已经为他助力过！\n`);
-				  break;
-				}
-				if (bashInfo?.data?.helpState == 0) {
-				  console.log(`无法为自己助力\n`);
-				}
-				if (bashInfo?.data?.helpState == 3) {
-				  console.log(`助力次数已用尽，跳出\n`);
-				  break;
-				}
-				if (bashInfo?.data?.helpState == 4) {
-				  console.log(`他的助力已满，无需助力\n`);
-				}
-				
-			} 
-		}
-	  } 
-	
 })()
-
-
-function shareInviteFormat(){
-	
-  return new Promise(async resolve => {
-    	AuthorInvite =  await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/jd_scripts/main/AuthorShareCode/jd_joy_park_help.json');
-		$.invitePin = [...(AuthorInvite || [])];
-		  $.helpInfo.forEach(element => {
-			if( $.invitePin.indexOf(element) == -1){
-			  $.invitePin.push(element);
-			}
-		  });
-		console.log(`助力码格式完成,即将进行助力！\n`);
-		resolve();
-  })
-	
-
-}
-
-
-function getAuthorShareCode(url) {
-  return new Promise(async resolve => {
-   const options = {
-      url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-      }
-    };
-  
-    $.get(options, async (err, resp, data) => {
-      try {
-        if (err) {
-        } else {
-          if (data) data = JSON.parse(data)
-        }
-      } catch (e) {
-        // $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(10000)
-    resolve([]);
-  })
-}
-
 
 function requestApi(functionId, params) {
     if (!params) {
