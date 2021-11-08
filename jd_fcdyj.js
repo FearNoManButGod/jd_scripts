@@ -1,8 +1,28 @@
 /*
 活动入口： 京东极速版-我的-发财大赢家
+ * /
+ * 基于温某人大佬的脚本修改
+ * 助力逻辑：优先助力互助码环境变量，中午10点之后再给我助力
+ * TG交流群：https://t.me/jd_shufflewzc
+ * TG通知频道：https://t.me/jd_shufflewzc_tz
+ * /
+https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js
+已支持IOS双京东账号, Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#发财大赢家
+1 6-22/3 * * * https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js, tag=新潮品牌狂欢, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
-cron "20 10,13,16,19,22 * * *" script-path=https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js tag=翻翻乐
+================Loon==============
+[Script]
+cron "1 6-22/3 * * *" script-path=https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js tag=翻翻乐
 
+===============Surge=================
+发财大赢家 = type=cron,cronexp="1 6-22/3 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js
+
+============小火箭=========
+发财大赢家 = type=cron,script-path=https://raw.githubusercontent.com/Wenmoux/scripts/master/jd/jd_fcdyj.js, cronexpr="1 6-22/3 * * *", timeout=3600, enable=true
  */
 const $ = new Env('发财大赢家助力');
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -34,9 +54,35 @@ const JD_API_HOST = `https://api.m.jd.com`;
     $.canDraw = false
     $.canHelp = true;
     $.linkid = "PFbUR7wtwUcQ860Sn8WRfw"
+
+    $.authorCode = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/jd_fcdyj.json')
+    if (!$.authorCode) {
+        $.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_fcdyj.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
+        await $.wait(1000)
+        $.authorCode = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_fcdyj.json') || []
+    }
+    if ($.authorCode && $.authorCode.length) {
+        for (let i = 0; i < cookiesArr.length; i++) {
+            cookie = cookiesArr[i];
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            $.canRun = true
+            console.log(`\n${$.UserName} 去助力 \n`)
+            for (let j = 0; j < $.authorCode.length; j++) {
+                let item = $.authorCode[j];
+                await help(item.redEnvelopeId, item.inviter, 1)
+                if (!$.canRun) {
+                    break;
+                }
+                await $.wait(1000)
+                await help(item.redEnvelopeId, item.inviter, 2)
+            }
+        }
+    }
+
     //开红包查询
     for (let i = 0; i < cookiesArr.length && $.needhelp; i++) {
         cookie = cookiesArr[i];
+        $.hotFlag = false;
         if (cookie) {
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.index = i + 1;
@@ -44,33 +90,10 @@ const JD_API_HOST = `https://api.m.jd.com`;
             $.message = `【京东账号${$.index}】${$.UserName}\n`
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
         }
-
-        $.authorCode = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/jd_fcdyj.json')
-        if (!$.authorCode) {
-            $.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_fcdyj.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
-            await $.wait(1000)
-            $.authorCode = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_fcdyj.json') || []
-        }
-        if ($.authorCode && $.authorCode.length) {
-            for (let i = 0; i < cookiesArr.length; i++) {
-                cookie = cookiesArr[i];
-                $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-                $.canRun = true
-                for (let j = 0; j < $.authorCode.length; j++) {
-                    let item = $.authorCode[j];
-                    await help(item.redEnvelopeId, item.inviter, 1)
-                    if (!$.canRun) {
-                        break;
-                    }
-                    await $.wait(1000)
-                    await help(item.redEnvelopeId, item.inviter, 2)
-                }
-            }
-        }
-
         if (!dyjCode) {
-            console.log(`\n环境变量中没有检测到助力码,开始获取【京东账号${$.index}】助力码\n`)
             await open()
+            if ($.hotFlag) continue;
+            console.log(`\n环境变量中没有检测到助力码,开始获取【京东账号${$.index}】助力码\n`)
             await getid()
         } else {
             dyjStr = dyjCode.split("@")
@@ -88,6 +111,9 @@ const JD_API_HOST = `https://api.m.jd.com`;
             }
         }
     }
+
+    
+    
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
         $.canWx = true
@@ -123,10 +149,12 @@ async function exchange() {
                     console.log(`${$.name} API请求失败，请检查网路重试`);
                 } else {
                     data = JSON.parse(data);
-                    if (data.success && data.data.chatEnvelopeVo.status == 50059) {
-                        console.log(`【京东账号${$.index}】${data.data.chatEnvelopeVo.message} ，尝试兑换红包...`)
-                        $.rewardType = 1
-                        await exchange()
+                    if (data.success && data.data) {
+                        if (data.data.chatEnvelopeVo.status == 50053 || data.data.chatEnvelopeVo.status == 50059) {
+                            console.log(`【京东账号${$.index}】${data.data.chatEnvelopeVo.message} ，尝试兑换红包...`)
+                            $.rewardType = 1
+                            await exchange()
+                        }
                     } else {
                         console.log(`【京东账号${$.index}】提现成功`)
                     }
@@ -150,6 +178,10 @@ function open() {
                     console.log(`${$.name} API请求失败，请检查网路重试`);
                 } else {
                     data = JSON.parse(data);
+                    if (data.code === 16020) {
+                        $.hotFlag = true
+                        console.log(data.errMsg);
+                    }
                 }
             } catch (e) {
                 $.logErr(e, resp);
@@ -170,7 +202,7 @@ function getid() {
                     console.log(`${$.name} API请求失败，请检查网路重试`);
                 } else {
                     data = JSON.parse(data);
-                    console.log(data.data.state)
+                    // console.log(data.data.state)
                     if (data.data.state !== 0) {
                         if (data.success && data.data) {
                             console.log(`\n【您的redEnvelopeId】：${data.data.redEnvelopeId}`)
@@ -279,6 +311,7 @@ function help(rid, inviter, type) {
                         }
                     } else {
                         console.log(JSON.stringify(data))
+                        console.log(`【京东账号${$.UserName}】为黑号，跳过助力`)
                         $.canRun = false
                     }
                 }
@@ -291,29 +324,39 @@ function help(rid, inviter, type) {
     });
 }
 
-function getAuthorShareCode() {
-    return new Promise(resolve => {
-        $.get({
-            url: "https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/fcdyj.json",
-            headers: {
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+function getAuthorShareCode(url) {
+    return new Promise(async resolve => {
+      const options = {
+        url: `${url}?${new Date()}`, "timeout": 10000, headers: {
+          "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+        }
+      };
+      if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
+        const tunnel = require("tunnel");
+        const agent = {
+          https: tunnel.httpsOverHttp({
+            proxy: {
+              host: process.env.TG_PROXY_HOST,
+              port: process.env.TG_PROXY_PORT * 1
             }
-        }, async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`);
-                    console.log(`${$.name} API请求失败，请检查网路重试`);
-                } else {
-                    $.authorCode = JSON.parse(data);
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve();
-            }
-        })
+          })
+        }
+        Object.assign(options, { agent })
+      }
+      $.get(options, async (err, resp, data) => {
+        try {
+          resolve(JSON.parse(data))
+        } catch (e) {
+          // $.logErr(e, resp)
+        } finally {
+          resolve();
+        }
+      })
+      await $.wait(10000)
+      resolve();
     })
-}
+  }
+  
 function taskUrl(function_id, body) {
     return {
         url: `${JD_API_HOST}/?functionId=${function_id}&body=${encodeURIComponent(body)}&t=${Date.now()}&appid=activities_platform&clientVersion=3.5.2`,
