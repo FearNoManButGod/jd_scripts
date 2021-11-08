@@ -257,6 +257,7 @@ function smtgHome() {
     })
   })
 }
+
 //领限时商品的蓝币
 async function receiveLimitProductBlueCoin() {
   const res = await smtgReceiveCoin({ "type": 1 });
@@ -265,12 +266,13 @@ async function receiveLimitProductBlueCoin() {
     message += `【限时商品】获得${res.data.result.receivedBlue}个蓝币\n`;
   }
 }
+
 //领蓝币
 function receiveBlueCoin(timeout = 0) {
   return new Promise((resolve) => {
     setTimeout( ()=>{
       $.get(taskUrl('smtg_receiveCoin', {"type": 4, "shopId": $.currentShopId, "channel": "18"}), async (err, resp, data) => {
-         try {
+        try {
           if (err) {
             console.log('\n东东超市: API查询请求失败 ‼️‼️')
             console.log(JSON.stringify(err));
@@ -1598,6 +1600,7 @@ function getTeam() {
     resolve()
   })
 }
+
 function taskUrl(function_id, body = {}) {
   return {
     url: `${JD_API_HOST}?appid=jdsupermarket&functionId=${function_id}&clientVersion=8.0.0&client=m&body=${encodeURIComponent(JSON.stringify(body))}&t=${Date.now()}`,
@@ -1683,7 +1686,7 @@ async function bigWinner() {
   }
 }
 
-function _618(redEnvelopeId, inviter, helpType = '1', linkId = 'yMVR-_QKRd2Mq27xguJG-w') {
+function _618(redEnvelopeId, inviter, helpType = '1', linkId = 'PFbUR7wtwUcQ860Sn8WRfw') {
   return new Promise(resolve => {
     $.get({
       url: `https://api.m.jd.com/?functionId=openRedEnvelopeInteract&body={%22linkId%22:%22${linkId}%22,%22redEnvelopeId%22:%22${redEnvelopeId}%22,%22inviter%22:%22${inviter}%22,%22helpType%22:%22${helpType}%22}&t=${+new Date()}&appid=activities_platform&clientVersion=3.5.0`,
@@ -1693,7 +1696,7 @@ function _618(redEnvelopeId, inviter, helpType = '1', linkId = 'yMVR-_QKRd2Mq27x
         'origin': 'https://618redpacket.jd.com',
         'user-agent': 'jdltapp;iPhone;3.5.0;14.2;network/wifi;hasUPPay/0;pushNoticeIsOpen/0;lang/zh_CN;model/iPhone10,2;hasOCPay/0;appBuild/1066;supportBestPay/0;pv/7.0;apprpd/;Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1',
         'accept-language': 'zh-cn',
-        'referer': `https://618redpacket.jd.com/?activityId=yMVR-_QKRd2Mq27xguJG-w&redEnvelopeId=${redEnvelopeId}&inviterId=${inviter}&helpType=1&lng=&lat=&sid=`,
+        'referer': `https://618redpacket.jd.com/?activityId=${linkId}&redEnvelopeId=${redEnvelopeId}&inviterId=${inviter}&helpType=1&lng=&lat=&sid=`,
         'Cookie': cookie
       }
     }, (err, resp, data) => {

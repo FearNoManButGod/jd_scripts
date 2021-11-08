@@ -28,6 +28,7 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let joinIdInfo = {}, AuthorizationInfo = {};
+let num;
 $.shareCodes = [];
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -65,16 +66,17 @@ let allMessage = '';
         }
         continue
       }
+      num = 0
       await jdYs()
       joinIdInfo[$.UserName] = $.joinId
       AuthorizationInfo[$.UserName] = $.Authorization
     }
   }
-  let res = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/ys.json')
+  let res = await getAuthorShareCode('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/ys.json')
   if (!res) {
-    $.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/ys.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
+    $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/ys.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
     await $.wait(1000)
-    res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/ys.json')
+    res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/ys.json')
   }
   $.shareCodes = [...new Set([...$.shareCodes, ...(res || [])])]
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -342,6 +344,8 @@ function lottery() {
                 num = 0
               } else {
                 console.log(`抽奖成功：获得空气~`)
+                num++
+                if (num === 5) $.stop = true
               }
             } else {
               console.log(`抽奖失败：${data.msg}`)
