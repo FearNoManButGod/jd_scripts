@@ -4,8 +4,9 @@
 jd_zdjr_activityId  活动ID 必需
 jd_zdjr_activityUrl 活动地址 必需
 
-已适配docker
 
+
+已适配docker
 需要配合重写获取=>活动id、活动地址
 
 https://\w+-isv.isvjcloud.com/wxTeam/shopInfo url script-request-body smiek_jd_zdjr.js
@@ -13,6 +14,8 @@ https://\w+-isv.isvjcloud.com/wxTeam/shopInfo url script-request-body smiek_jd_z
 mitm
 *-isv.isvjcloud.com
 
+组队开卡
+cron "0 * 8 * *" script-path= jd_zdjr.js,tag= 组队开卡
 */
 
 let jd_zdjr_activityId = ''// 活动ID

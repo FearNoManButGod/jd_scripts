@@ -4,7 +4,7 @@ github：https://github.com/Ariszy/Private-Script
 boxjs：https://raw.githubusercontent.com/Ariszy/Private-Script/master/Ariszy.boxjs.json
 
 [task_local]
-#手机竞猜
+手机竞猜
 0 0 * * * https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_sjjc.js, tag= 手机竞猜
 ================Loon==============
 [Script]
@@ -13,7 +13,7 @@ cron "0 0 * * *" script-path= https://raw.githubusercontent.com/Ariszy/Private-S
 ===============Surge=================
 手机竞猜 = type=cron,cronexp="0 0 * * *",wake-system=1,timeout=3600,script-path= https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_sjjc.js
 ============小火箭=========
-sjjc = type=cron,script-path= https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_sjjc.js, cronexpr="0 0 * * *", timeout=3600, enable=true
+手机竞猜 = type=cron,script-path= https://raw.githubusercontent.com/Ariszy/Private-Script/master/JD/zy_sjjc.js, cronexpr="0 0 * * *", timeout=3600, enable=true
 */
 const Ariszy = '手机竞猜'
 const $ = Env(Ariszy)
