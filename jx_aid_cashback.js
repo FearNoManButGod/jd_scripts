@@ -2,7 +2,7 @@
 京喜购物返红包助力
 cron "20 23 * * *" script-path=jx_aid_cashback.js,tag= 京喜购物返红包助力
 */
-let common = require("./function/common");
+let common = require("./utils/common");
 let $ = new common.env('京喜购物返红包助力');
 let min = 5,
     help = $.config[$.filename(__filename)] || Math.min(min, $.config.JdMain) || min;
