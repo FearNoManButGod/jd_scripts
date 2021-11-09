@@ -12,7 +12,7 @@ https://u.jd.com/ydXi8Ph
 const $ = new Env('双十一巅峰狂欢🧧');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-const Faker = $.isNode() ? require('./sign_graphics_validate.js') : '';
+const Faker = $.isNode() ? require('./utils/sign_graphics_validate.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [],
     cookie = '';
