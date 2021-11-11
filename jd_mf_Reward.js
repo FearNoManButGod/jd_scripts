@@ -142,8 +142,9 @@ async function queryInteractiveRewardInfo(encryptProjectId,encryptAssignmentId, 
           if (safeGet(data)) {
             data = JSON.parse(data)
             if(data.code == 0){
-              $.RewardNum = data.exchangeRestScoreMap.scoreExchangeId;
-              console.log($.RewardNum);
+              $.exchangeRestScoreMap = data.exchangeRestScoreMap;
+
+              console.log($.$.exchangeRestScoreMap);
             }else{
               console.log(`获取魔方个数失败，请手动查看是否黑号！`)
             }
