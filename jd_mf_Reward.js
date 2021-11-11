@@ -111,6 +111,7 @@ async function queryInteractiveInfo(encryptProjectId, sourceCode) {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data)
+            console.log(data);
             for (let key of Object.keys(data.assignmentList)) {
               let vo = data.assignmentList[key]
               if (vo.assignmentName === "京豆" && vo.exchangeRate === 5) {
