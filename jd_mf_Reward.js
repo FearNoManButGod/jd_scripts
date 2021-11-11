@@ -88,7 +88,6 @@ async function getInteractionHomeInfo() {
           if (safeGet(data)) {
             data = JSON.parse(data)
             await queryInteractiveInfo(data.result.giftConfig.projectId, "acexinpin0823")
-            // 
 
           }
         }
@@ -111,13 +110,11 @@ async function queryInteractiveInfo(encryptProjectId, sourceCode) {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data)
-            console.log(data);
             for (let key of Object.keys(data.assignmentList)) {
               let vo = data.assignmentList[key]
               if (vo.assignmentName === "京豆" && vo.exchangeRate === 5) {
                 await queryInteractiveRewardInfo(encryptProjectId, vo.encryptAssignmentId,"acexinpin0823",vo.scoreExchangeId)
               }
-              
             }
           }
         }
@@ -144,9 +141,9 @@ async function queryInteractiveRewardInfo(encryptProjectId,encryptAssignmentId, 
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data)
-            console.log(data);
             if(data.code == 0){
-              $.RewardNum = data.exchangeRestScoreMap
+              $.RewardNum = data.exchangeRestScoreMap.scoreExchangeId;
+              console.log($.RewardNum);
             }else{
               console.log(`获取魔方个数失败，请手动查看是否黑号！`)
             }
