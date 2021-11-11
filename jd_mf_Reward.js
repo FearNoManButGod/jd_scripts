@@ -5,17 +5,17 @@
 ============Quantumultx===============
 [task_local]
 #京东小魔方
-31 2,8 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_mf.js, tag=京东小魔方, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+31 2,8 * * *  jd_mf.js, tag=京东小魔方, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "31 2,8 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_mf.js,tag=京东小魔方
+cron "31 2,8 * * *" script-path= jd_mf_Reward.js,tag=京东小魔方
 
 ===============Surge=================
-京东小魔方 = type=cron,cronexp="31 2,8 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_mf.js
+京东小魔方 = type=cron,cronexp="31 2,8 * * *",wake-system=1,timeout=3600,script-path= jd_mf_Reward.js
 
 ============小火箭=========
-京东小魔方 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_mf.js, cronexpr="31 2,8 * * *", timeout=3600, enable=true
+京东小魔方 = type=cron,script-path= jd_mf_Reward.js, cronexpr="31 2,8 * * *", timeout=3600, enable=true
  */
 const $ = new Env('京东小魔方兑换');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -23,20 +23,18 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '', message;
-let uuid
-$.shareCodes = []
-let hotInfo = {}
+let cookiesArr = [], cookie = '', message ;
+
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let allMessage = '';
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -61,9 +59,6 @@ let allMessage = '';
         }
         continue
       }
-      $.sku = []
-      $.hot = false
-      uuid = randomString(40)
       await jdMofang()
     }
   }
@@ -92,7 +87,8 @@ async function getInteractionHomeInfo() {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data)
-            await queryInteractiveRewardInfo(data.result.giftConfig.projectId, "acexinpin0823")
+            await queryInteractiveInfo(data.result.giftConfig.projectId, "acexinpin0823")
+            // 
 
           }
         }
@@ -105,9 +101,41 @@ async function getInteractionHomeInfo() {
   })
 }
 
-async function queryInteractiveRewardInfo(encryptProjectId, sourceCode) {
+async function queryInteractiveInfo(encryptProjectId, sourceCode) {
   return new Promise(async (resolve) => {
-    $.post(taskUrl("queryInteractiveRewardInfo", {"encryptProjectId":encryptProjectId,"sourceCode":sourceCode,"ext":{}}), async (err, resp, data) => {
+    $.post(taskUrl("queryInteractiveInfo", {"encryptProjectId":encryptProjectId,"sourceCode":sourceCode,"ext":{"couponUsableGetSwitch":"1"}}), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} queryInteractiveInfo API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data)
+            for (let key of Object.keys(data.assignmentList)) {
+              let vo = data.assignmentList[key]
+              if (vo.assignmentName === "京豆" && vo.exchangeRate === 5) {
+                await queryInteractiveRewardInfo(encryptProjectId, vo.encryptAssignmentId,"acexinpin0823",vo.scoreExchangeId)
+              }
+              
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data)
+      }
+    })
+  })
+}
+
+
+
+
+
+async function queryInteractiveRewardInfo(encryptProjectId,encryptAssignmentId, sourceCode,scoreExchangeId) {
+  return new Promise(async (resolve) => {
+    $.post(taskUrl("queryInteractiveRewardInfo", {"encryptProjectId":encryptProjectId,"sourceCode":sourceCode,"ext":{"needExchangeRestScore":"1"}}), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -116,6 +144,11 @@ async function queryInteractiveRewardInfo(encryptProjectId, sourceCode) {
           if (safeGet(data)) {
             data = JSON.parse(data)
             console.log(data);
+            if(data.code == 0){
+              $.RewardNum = data.exchangeRestScoreMap
+            }else{
+              console.log(`获取魔方个数失败，请手动查看是否黑号！`)
+            }
 
 
            
@@ -131,31 +164,6 @@ async function queryInteractiveRewardInfo(encryptProjectId, sourceCode) {
 }
 
 
-
-async function queryInteractiveInfo(encryptProjectId, sourceCode) {
-  return new Promise(async (resolve) => {
-    $.post(taskUrl("queryInteractiveInfo", {"encryptProjectId":encryptProjectId,"sourceCode":sourceCode,"ext":{}}), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} queryInteractiveInfo API请求失败，请检查网路重试`)
-        } else {
-          if (safeGet(data)) {
-            data = JSON.parse(data)
-            console.log();
-
-
-           
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data)
-      }
-    })
-  })
-}
 
 
 
