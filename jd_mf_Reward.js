@@ -142,15 +142,15 @@ async function queryInteractiveRewardInfo(encryptProjectId,encryptAssignmentId, 
           if (safeGet(data)) {
             data = JSON.parse(data)
             if(data.code == 0){
-              $.exchangeRestScoreMap = data.exchangeRestScoreMap;
+              $.exchangeNum = data.exchangeRestScoreMap['367'];
+              if($.exchangeNum === 0){
+                console.log(`获取魔方个数失败，请手动进入活动查询`)
+              }else{
 
-              console.log($.$.exchangeRestScoreMap);
+              }
             }else{
               console.log(`获取魔方个数失败，请手动查看是否黑号！`)
             }
-
-
-           
           }
         }
       } catch (e) {
