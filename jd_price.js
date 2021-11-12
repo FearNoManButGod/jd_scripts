@@ -24,7 +24,7 @@ cron "41 11 7,14,21,28 * *" jd_priceProtect_Mod.js, tag:京东价保一对一推
  let WP_APP_TOKEN_ONE = "";
  let strmessagebyone="";
  if ($.isNode() && process.env.WP_APP_TOKEN_ONE) {
-   WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
+     WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
  }
  
  !(async () => {
@@ -32,6 +32,7 @@ cron "41 11 7,14,21,28 * *" jd_priceProtect_Mod.js, tag:京东价保一对一推
          $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
          return;
      }
+     await jstoken();
      for (let i = 0; i < cookiesArr.length; i++) {
          if (cookiesArr[i]) {
              cookie = cookiesArr[i];
@@ -51,11 +52,11 @@ cron "41 11 7,14,21,28 * *" jd_priceProtect_Mod.js, tag:京东价保一对一推
                  }
                  continue
              }
-       strmessagebyone=""
+             strmessagebyone=""
              await price()
-       if (strmessagebyone && $.isNode() && WP_APP_TOKEN_ONE) {
-         await notify.sendNotifybyWxPucher("京东保价",strmessagebyone, `${$.UserName}`);				
-       }
+             if (strmessagebyone && $.isNode() && WP_APP_TOKEN_ONE) {
+                 await notify.sendNotifybyWxPucher("京东保价",strmessagebyone, `${$.UserName}`);				
+             }
              await $.wait(2000)
          }
      }
@@ -73,7 +74,7 @@ cron "41 11 7,14,21,28 * *" jd_priceProtect_Mod.js, tag:京东价保一对一推
  async function price() {
      let num = 0
      do {
-         await jstoken();
+         $.token = $.jab.getToken() || ''
          if ($.token) {
              await siteppM_skuOnceApply();
          }
@@ -83,13 +84,13 @@ cron "41 11 7,14,21,28 * *" jd_priceProtect_Mod.js, tag:京东价保一对一推
  }
  
  async function siteppM_skuOnceApply() {
-     let body = {
-         sid: "",
-         type: "3",
-         forcebot: "",
-         token: $.token,
-         feSt: "s"
-     }
+   let body = {
+     sid: "",
+     type: "25",
+     forcebot: "",
+     token: $.token,
+     feSt: $.token ? "s" : "f"
+   }
      return new Promise(async resolve => {
          $.post(taskUrl("siteppM_skuOnceApply", body), async (err, resp, data) => {
              try {
@@ -100,7 +101,7 @@ cron "41 11 7,14,21,28 * *" jd_priceProtect_Mod.js, tag:京东价保一对一推
                      if (safeGet(data)) {
                          data = JSON.parse(data)
                          if (data.flag) {
-                             await $.wait(20 * 1000)
+                             await $.wait(30 * 1000)
                              await siteppM_appliedSuccAmount()
                          } else {
                              console.log(`保价失败：${data.responseMessage}`)
@@ -119,7 +120,7 @@ cron "41 11 7,14,21,28 * *" jd_priceProtect_Mod.js, tag:京东价保一对一推
  function siteppM_appliedSuccAmount() {
      let body = {
          sid: "",
-         type: "3",
+         type: "25",
          forcebot: "",
          num: 15
      }
@@ -135,7 +136,7 @@ cron "41 11 7,14,21,28 * *" jd_priceProtect_Mod.js, tag:京东价保一对一推
                          if (data.flag) {
                              console.log(`保价成功：返还${data.succAmount}元`)
                              message += `保价成功：返还${data.succAmount}元\n`
-               strmessagebyone=`恭喜保价成功，京东将返还${data.succAmount}元\n`+`查询地址: 京东app->客户服务->价格保护->申请记录`;
+                             strmessagebyone=`恭喜保价成功，京东将返还${data.succAmount}元\n`+`查询地址: 京东app->客户服务->价格保护->申请记录`;
                          } else {
                              console.log(`保价失败：没有可保价的订单`)
                          }
@@ -151,32 +152,55 @@ cron "41 11 7,14,21,28 * *" jd_priceProtect_Mod.js, tag:京东价保一对一推
  }
  
  async function jstoken() {
-     const { JSDOM } = jsdom;
-     let resourceLoader = new jsdom.ResourceLoader({
-         userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
-         referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
-     });
-     let virtualConsole = new jsdom.VirtualConsole();
-     var options = {
-         referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
-         userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
-         runScripts: "dangerously",
-         resources: resourceLoader,
-         includeNodeLocations: true,
-         storageQuota: 10000000,
-         pretendToBeVisual: true,
-         virtualConsole
+   const { JSDOM } = jsdom;
+   let resourceLoader = new jsdom.ResourceLoader({
+     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
+     referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu"
+   });
+   let virtualConsole = new jsdom.VirtualConsole();
+   let options = {
+     url: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
+     referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
+     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
+     runScripts: "dangerously",
+     resources: resourceLoader,
+     includeNodeLocations: true,
+     storageQuota: 10000000,
+     pretendToBeVisual: true,
+     virtualConsole
+   };
+   const { window } = new JSDOM(``, options);
+   const jdPriceJs = await downloadUrl("https://js-nocaptcha.jd.com/statics/js/main.min.js")
+   try {
+     window.eval(jdPriceJs)
+     window.HTMLCanvasElement.prototype.getContext = () => {
+       return {};
      };
-     let dom = new JSDOM(`<body><script src="https://js-nocaptcha.jd.com/statics/js/main.min.js"></script></body>`, options);
-     await $.wait(1000)
-     try {
-         feSt = 's'
-         jab = new dom.window.JAB({
-             bizId: 'jdjiabao',
-             initCaptcha: false
-         })
-         $.token = jab.getToken() || ''
-     } catch (e) {}
+     $.jab = new window.JAB({
+       bizId: 'jdjiabao',
+       initCaptcha: false
+     })
+   } catch (e) {}
+ }
+ 
+ function downloadUrl(url) {
+   return new Promise(resolve => {
+     const options = { url, "timeout": 10000 };
+     $.get(options, async (err, resp, data) => {
+       let res = null
+       try {
+         if (err) {
+           console.log(`⚠️网络请求失败`);
+         } else {
+           res = data;
+         }
+       } catch (e) {
+         $.logErr(e, resp)
+       } finally {
+         resolve(res);
+       }
+     })
+   })
  }
  
  function showMsg() {
@@ -207,46 +231,45 @@ cron "41 11 7,14,21,28 * *" jd_priceProtect_Mod.js, tag:京东价保一对一推
      }
  }
  
+ 
  function TotalBean() {
-     return new Promise(async resolve => {
-         const options = {
-             url: "https://wq.jd.com/user_new/info/GetJDUserInfoUnion?sceneval=2",
-             headers: {
-                 Host: "wq.jd.com",
-                 Accept: "*/*",
-                 Connection: "keep-alive",
-                 Cookie: cookie,
-                 "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-                 "Accept-Language": "zh-cn",
-                 "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
-                 "Accept-Encoding": "gzip, deflate, br"
+   return new Promise(resolve => {
+     const options = {
+       url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",
+       headers: {
+         "Host": "me-api.jd.com",
+         "Accept": "*/*",
+         "User-Agent": "ScriptableWidgetExtension/185 CFNetwork/1312 Darwin/21.0.0",
+         "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+         "Accept-Encoding": "gzip, deflate, br",
+         "Cookie": cookie
+       }
+     }
+     $.get(options, (err, resp, data) => {
+       try {
+         if (err) {
+           $.logErr(err)
+         } else {
+           if (data) {
+             data = JSON.parse(data);
+             if (data['retcode'] === "1001") {
+               $.isLogin = false; //cookie过期
+               return;
              }
+             if (data['retcode'] === "0" && data.data && data.data.hasOwnProperty("userInfo")) {
+               $.nickName = data.data.userInfo.baseInfo.nickname;
+             }
+           } else {
+             console.log('京东服务器返回空数据');
+           }
          }
-         $.get(options, (err, resp, data) => {
-             try {
-                 if (err) {
-                     $.logErr(err)
-                 } else {
-                     if (data) {
-                         data = JSON.parse(data);
-                         if (data['retcode'] === 1001) {
-                             $.isLogin = false; //cookie过期
-                             return;
-                         }
-                         if (data['retcode'] === 0 && data.data && data.data.hasOwnProperty("userInfo")) {
-                             $.nickName = data.data.userInfo.baseInfo.nickname;
-                         }
-                     } else {
-                         console.log('京东服务器返回空数据');
-                     }
-                 }
-             } catch (e) {
-                 $.logErr(e)
-             } finally {
-                 resolve();
-             }
-         })
+       } catch (e) {
+         $.logErr(e, resp)
+       } finally {
+         resolve()
+       }
      })
+   })
  }
  function safeGet(data) {
      try {
