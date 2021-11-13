@@ -5,9 +5,9 @@ cron "20 10-22/2 * * *" script-path=jd_fcwb.js tag=发财挖宝
 
  */
 const $ = new Env('发财挖宝');
-const notify = $.isNode() ? require('../sendNotify') : '';
+const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
-const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const fcwbCode = $.isNode() ? (process.env.fcwbCode ? process.env.fcwbCode : null) : null ;
 const JD_API_HOST = 'https://api.m.jd.com';
 //IOS等用户直接用NobyDa的jd cookie
@@ -111,7 +111,7 @@ if ($.isNode()) {
 function TaskList(){
   return new Promise((resolve) => {
     const nm= {
-        url: `${JD_API_HOST}/?functionId=apTaskList&body={"linkId":"yCcpwTLIbY6pjaM42ACUVg"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+        url: `${JD_API_HOST}/?functionId=apTaskList&body={"linkId":"pTTvJeSTrpthgk9ASBVGsw"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
         headers: {
           "Accept": "application/json,text/plain, */*",
           "Accept-Encoding": "gzip, deflate, br",
@@ -119,8 +119,8 @@ function TaskList(){
           "Connection": "keep-alive",
           "Cookie": cookie,
           "Host": "api.m.jd.com",
-          "Origin": "https://bnzf.jd.com/?activityId=yCcpwTLIbY6pjaM42ACUVg",
-          "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
+          "Origin": "https://bnzf.jd.com/?activityId=pTTvJeSTrpthgk9ASBVGsw",
+          "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
         }
       }
       $.get(nm, async (err, resp, data) => {
@@ -191,7 +191,7 @@ function TaskList(){
 function wb(chunks) {
  return new Promise((resolve) => {
     const nm= {
-        url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${$.curRound},"rowIdx":${chunks.split(",")[0]},"colIdx":${chunks.split(",")[1]},"linkId":"yCcpwTLIbY6pjaM42ACUVg"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+        url: `${JD_API_HOST}/?functionId=happyDigDo&body={"round":${$.curRound},"rowIdx":${chunks.split(",")[0]},"colIdx":${chunks.split(",")[1]},"linkId":"pTTvJeSTrpthgk9ASBVGsw"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
         headers: {
           "Accept": "application/json,text/plain, */*",
           "Accept-Encoding": "gzip, deflate, br",
@@ -199,8 +199,8 @@ function wb(chunks) {
           "Connection": "keep-alive",
           "Cookie": cookie,
           "Host": "api.m.jd.com",
-          "Origin": "https://bnzf.jd.com/?activityId=yCcpwTLIbY6pjaM42ACUVg",
-          "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
+          "Origin": "https://bnzf.jd.com/?activityId=pTTvJeSTrpthgk9ASBVGsw",
+          "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
         }
       }
       $.get(nm, async (err, resp, data) => {
@@ -237,7 +237,7 @@ function wb(chunks) {
 }
 function home(flag=false) {
   return new Promise((resolve) => {
-    let body = {"linkId":"yCcpwTLIbY6pjaM42ACUVg"}
+    let body = {"linkId":"pTTvJeSTrpthgk9ASBVGsw"}
     $.get(taskurl('happyDigHome',body), async (err, resp, data) => {
         try {
           if (err) {
@@ -308,7 +308,7 @@ function home(flag=false) {
 
 function BROWSE_CHANNEL(taskId,itemId) {
  return new Promise((resolve) => {
-  let body = {"linkId":"yCcpwTLIbY6pjaM42ACUVg","taskType":"BROWSE_CHANNEL","taskId": taskId ,"channel": 4,"itemId": itemId ,"checkVersion":false};
+  let body = {"linkId":"pTTvJeSTrpthgk9ASBVGsw","taskType":"BROWSE_CHANNEL","taskId": taskId ,"channel": 4,"itemId": itemId ,"checkVersion":false};
   $.get(taskurl('apDoTask',body), async (err, resp, data) => {
       try {
         if (err) {
@@ -336,7 +336,7 @@ function BROWSE_CHANNEL(taskId,itemId) {
 function help(inviteCode,markedPin) {
   return new Promise((resolve) => {
   const nm= {
-    url: `${JD_API_HOST}/?functionId=happyDigHelp&body={"linkId":"yCcpwTLIbY6pjaM42ACUVg","inviter":"${markedPin}","inviteCode":"${inviteCode}"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
+    url: `${JD_API_HOST}/?functionId=happyDigHelp&body={"linkId":"pTTvJeSTrpthgk9ASBVGsw","inviter":"${markedPin}","inviteCode":"${inviteCode}"}&t=${Date.now()}&appid=activities_platform&client=H5&clientVersion=1.0.0`,
     headers: {
         "Accept": "application/json,text/plain, */*",
         "Accept-Encoding": "gzip, deflate, br",
@@ -344,8 +344,8 @@ function help(inviteCode,markedPin) {
         "Connection": "keep-alive",
         "Cookie": cookie,
         "Host": "api.m.jd.com",
-        "Origin": "https://bnzf.jd.com/?activityId=yCcpwTLIbY6pjaM42ACUVg",
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
+        "Origin": "https://bnzf.jd.com/?activityId=pTTvJeSTrpthgk9ASBVGsw",
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
     }
   }     
   $.get(nm, async (err, resp, data) => {
@@ -388,7 +388,7 @@ function help(inviteCode,markedPin) {
         "Connection": "keep-alive",
         "Cookie": cookie,
         "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
       }
     }
     $.post(options, (err, resp, data) => {
@@ -454,8 +454,8 @@ function taskurl(functionId,body) {
         "Connection": "keep-alive",
         "Cookie": cookie,
         "Host": "api.m.jd.com",
-        "Origin": "https://bnzf.jd.com/?activityId=yCcpwTLIbY6pjaM42ACUVg",
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
+        "Origin": "https://bnzf.jd.com/?activityId=pTTvJeSTrpthgk9ASBVGsw",
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;")
     }
   }
 }
