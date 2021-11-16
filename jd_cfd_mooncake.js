@@ -51,7 +51,6 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 !(async () => {
-  await requireConfig();
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
@@ -85,6 +84,13 @@ if ($.isNode()) {
       await $.wait(2000);
     }
   }
+  let res = await getAuthorShareCode('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/cfd.json')
+  if (!res) {
+    $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/cfd.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
+    await $.wait(1000)
+    res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/cfd.json')
+  }
+  $.strMyShareIds = [...(res && res.shareId || [])]
   await shareCodesFormat()
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
@@ -194,25 +200,30 @@ async function composePearlState(type) {
               if (data.iRet === 0) {
                 console.log(`当前已合成${data.dwCurProgress}颗月饼，总计获得${data.ddwVirHb / 100}元红包`)
                 if (data.strDT) {
-                  let beacon = data.PearlList[0]
-                  data.PearlList.shift()
-                  let beaconType = beacon.type
-                  let num = Math.ceil(Math.random() * 12 + 12)
+                  // let num = Math.ceil(Math.random() * 12 + 12)
+                  let num = data.PearlList.length
+                  let div = Math.ceil(Math.random() * 4 + 2)
                   console.log(`合成月饼：模拟操作${num}次`)
                   for (let v = 0; v < num; v++) {
                     console.log(`模拟操作进度：${v + 1}/${num}`)
-                    await $.wait(2000)
-                    await realTmReport(data.strMyShareId)
+                    let beacon = data.PearlList[0]
+                    data.PearlList.shift()
+                    let beaconType = beacon.type
+                    if (v % div === 0){
+                      await realTmReport(data.strMyShareId)
+                      await $.wait(5000)
+                    }
                     if (beacon.rbf) {
                       let size = 1
-                      for (let key of Object.keys(data.PearlList)) {
-                        let vo = data.PearlList[key]
-                        if (vo.rbf && vo.type === beaconType) {
-                          size = 2
-                          vo.rbf = 0
-                          break
-                        }
-                      }
+                      // for (let key of Object.keys(data.PearlList)) {
+                      //   let vo = data.PearlList[key]
+                      //   if (vo.rbf && vo.type === beaconType) {
+                      //     data.PearlList.splice(key, 1)
+                      //     size = 2
+                      //     vo.rbf = 0
+                      //     break
+                      //   }
+                      // }
                       await composePearlAward(data.strDT, beaconType, size)
                     }
                   }
@@ -654,63 +665,16 @@ function readShareCode() {
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
-
-    $.newShareCodes =  [...($.strMyShareIds || [])];
-    if ($.shareCodesArr[$.index - 1]) {
-      let helpShareCodes = $.shareCodesArr[$.index - 1].split('@');
-	  	helpShareCodes.forEach(element => {
-			if( $.newShareCodes.indexOf(element) == -1){
-			  $.newShareCodes.push(element);
-			}
-		})											
-    } else {
-      console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
-      // const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
-      $.newShareCodes = [...$.strMyShareIds];
-    }
-    //  const readShareCodeRes = await readShareCode();
-    //  if (readShareCodeRes && readShareCodeRes.code === 200) {
-     //  $.newShareCodes = [...new Set([...$.newShareCodes, ...$.shareCodes, ...(readShareCodeRes.data || [])])];
-      // $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
-    //  }
-    console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
+    $.newShareCodes = []
+    // const readShareCodeRes = await readShareCode();
+    // if (readShareCodeRes && readShareCodeRes.code === 200) {
+    //   $.newShareCodes = [...new Set([...$.shareCodes, ...$.strMyShareIds, ...(readShareCodeRes.data || [])])];
+    // } else {
+    //   $.newShareCodes = [...new Set([...$.shareCodes, ...$.strMyShareIds])];
+    // }
+    $.newShareCodes = [...new Set([...$.shareCodes, ...$.strMyShareIds])];
+    console.log(`您将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
-  })
-}
-
-
-
-function requireConfig() {
-  return new Promise(async resolve => {
-    console.log(`开始获取${$.name}配置文件\n`);
-    let shareCodes = [];
-    if ($.isNode() && process.env.JDCFD_SHARECODES) {
-      if (process.env.JDCFD_SHARECODES.indexOf('\n') > -1) {
-        shareCodes = process.env.JDCFD_SHARECODES.split('\n');
-      } else {
-        shareCodes = process.env.JDCFD_SHARECODES.split('&');
-      }
-    }
-    $.shareCodesArr = [];
-    if ($.isNode()) {
-      Object.keys(shareCodes).forEach((item) => {
-        if (shareCodes[item]) {
-          $.shareCodesArr.push(shareCodes[item])
-        }
-      })
-    } else {
-      if ($.getdata('jd_jxCFD')) $.shareCodesArr = $.getdata('jd_jxCFD').split('\n').filter(item => !!item);
-      console.log(`\nBoxJs设置的京喜财富岛邀请码:${$.getdata('jd_jxCFD')}\n`);
-    }
-    console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
-	let res = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/jd_cfd.json')
-	if (!res) {
-		$.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_cfd.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
-		await $.wait(1000)
-		res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_cfd.json')
-	}
-	$.strMyShareIds = [...(res && res.shareId || [])];																 
-    resolve()
   })
 }
 
