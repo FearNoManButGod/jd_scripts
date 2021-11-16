@@ -3,8 +3,8 @@
 cron "0 1,2,23 * * *" script-path= jd_rush_vivo.js
 **/
 const $ = new Env("Phone");
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
 let ownCode = null;
 if ($.isNode()) {

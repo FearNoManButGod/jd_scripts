@@ -1,5 +1,5 @@
 /*
-cron "30 21 * * *" jd_bean_change_new.js, tag:资产变化强化版by-ccwav
+cron "30 21 * * *" jd_bean_change.js, tag:资产变化强化版by-ccwav
  */
 
 //详细说明参考 https://github.com/ccwav/QLScript2.
@@ -1534,7 +1534,10 @@ function cash() {
 				} else {
 					if (safeGet(data)) {
 						data = JSON.parse(data);
-						$.JDtotalcash = data.data.goldBalance;
+						if (data.data.goldBalance)
+							$.JDtotalcash = data.data.goldBalance;
+						else
+							console.log(`领现金查询失败，服务器没有返回具体值.`)
 					}
 				}
 			} catch (e) {
