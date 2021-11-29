@@ -51,6 +51,11 @@ cron "0 7 * * *" jd_speed_sign_Part1.js, tag:京东极速版任务1
        }
        await jdGlobal()
        await $.wait(10*1000)
+     
+     if (llAPIError){
+     console.log(`黑IP了，赶紧重新拨号换个IP吧`);
+     break;
+     }
      }
    }
  })()
@@ -349,7 +354,7 @@ cron "0 7 * * *" jd_speed_sign_Part1.js, tag:京东极速版任务1
                  await $.wait(videoBrowsing * 1000)
          await $.wait(3000);
                  await endItem(data.data.uuid, activeType, activeId, activeType === 3 ? videoBrowsing : "")
-         await $.wait(4000);
+         await $.wait(1000);
                } else {
                  console.log(`${$.taskName}任务已达上限`)
                  $.canStartNewItem = false
