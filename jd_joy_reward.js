@@ -4,7 +4,7 @@ cron "58 7,15,23 * * *" jd_joy_reward_Mod.js
 //Mod by ccwav，20211014
 // prettier-ignore
 const $ = new Env('宠汪汪积分兑换有就换版');
-const zooFaker = require('./utils/JDJRValidator_Pure_Aaron');
+const zooFaker = require('./utils/JDJRValidator_Pure');
 // $.get = zooFaker.injectToRequest2($.get.bind($));
 // $.post = zooFaker.injectToRequest2($.post.bind($));
 let allMessage = '';
@@ -146,20 +146,18 @@ async function joyReward() {
 						}
 					}
 				} catch (e) {
-					llError = true;
+					llError = true;					
+				}				
+				if (!llError && saleInfoId) {
+					console.log('成功获取场次信息...');
+					break;					
+				} else {
 					console.log('东哥搞事情，不给京豆ID，等待5秒后重新获取...');
 					await $.wait(5000);
 				}
-				if (llError) {
-					continue;
-				} else {
-					console.log('成功获取场次信息...');
-					break;
-				}
-
 			}
 		}
-		if (llError) {
+		if (llError || !saleInfoId) {
 			console.log('东哥说现在不给你兑换，死了这条心吧...');
 			return;
 		}
