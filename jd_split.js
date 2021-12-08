@@ -65,14 +65,13 @@ $.shareCodes = [];
       await jdSplit()
     }
   }
-  // let res = await getAuthorShareCode('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/split.json')
-  // if (!res) {
-  //   $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/split.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
-  //   await $.wait(1000)
-  //   res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/split.json')
-  // }
-  let res = ""
-  $.newShareCodes = [...new Set([...$.shareCodes, ...(res || []), ...(res2 || [])])]
+  let res = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/split.json')
+  if (!res) {
+    $.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/split.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
+    await $.wait(1000)
+    res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/split.json')
+  }
+  $.newShareCodes = [...new Set([...(res || []),...$.shareCodes ])]
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
