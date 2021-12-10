@@ -70,7 +70,6 @@ $.appId = 10032;
     }
   }
   // 助力
-  let res = [], res2 = [];
   $.InviteLists = []
   let getShareNum = 10
   let getShareNums = 0
