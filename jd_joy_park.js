@@ -1,13 +1,5 @@
 // @grant nodejs
 /*
-ENV
-
-JOY_COIN_MAXIMIZE =      最大化硬币收益，如果合成后全部挖土后还有空位，则开启此模式（默认开启） 0关闭 1开启
-
-请确保新用户助力过开工位，否则开启游戏了就不算新用户，后面就不能助力开工位了！！！！！！！！！！
-
-脚本会默认帮zero205助力开工位，如需关闭请添加变量，变量名：HELP_JOYPARK，变量值：false
-
 更新地址：https://github.com/Tsukasa007/my_script
 
 ============Quantumultx===============
@@ -60,11 +52,7 @@ message = ""
     return;
   }
   for (let i = 0; i < cookiesArr.length; i++) {
-    //$.wait(50) 
-    // if (process.env.JOYPARK_JOY_START && i == process.env.JOYPARK_JOY_START){
-    //   console.log(`\n汪汪乐园养joy 只运行 ${process.env.JOYPARK_JOY_START} 个Cookie\n`);
-    //   break
-    // }
+    
     cookie = cookiesArr[i];
     if (cookie) {
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -82,27 +70,6 @@ message = ""
         continue
       }
       console.log(`\n\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-      if ($.isNode()) {
-        if (process.env.HELP_JOYPARK && process.env.HELP_JOYPARK == "false") {
-        } else {
-          await getShareCode()
-          if ($.kgw_invitePin && $.kgw_invitePin.length) {
-            $.log("开始帮CK1助力开工位\n");
-            $.kgw_invitePin = [...($.kgw_invitePin || [])][Math.floor((Math.random() * $.kgw_invitePin.length))];
-            let resp = await getJoyBaseInfo(undefined, 2, $.kgw_invitePin);
-            if (resp.helpState && resp.helpState === 1) {
-              $.log("帮CK1开工位成功，感谢！\n");
-            } else if (resp.helpState && resp.helpState === 3) {
-              $.log("你不是新用户！跳过开工位助力\n");
-            } else if (resp.helpState && resp.helpState === 2) {
-              $.log(`他的工位已全部开完啦！\n`);
-            } else {
-              $.log("开工位失败！\n");
-              console.log(`${JSON.stringify(resp)}`)
-            }
-          }
-        }
-      }
       //下地后还有有钱买Joy并且买了Joy
       $.hasJoyCoin = true
       await getJoyBaseInfo(undefined, undefined, undefined, true);
