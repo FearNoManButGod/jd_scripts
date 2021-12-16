@@ -83,17 +83,20 @@ message = ""
                 if (task.taskType === 'SIGN') {
                     $.log(`${task.taskTitle}`)
                     await apDoTask(task.id, task.taskType, undefined);
+                    await $.await(30000);
                     $.log(`${task.taskTitle} 领取奖励`)
                     await apTaskDrawAward(task.id, task.taskType);
+                    await $.await(30000);
                 }
                 if (task.taskType === 'BROWSE_PRODUCT' || task.taskType === 'BROWSE_CHANNEL' && task.taskLimitTimes !== 1) {
                     let productList = await apTaskDetail(task.id, task.taskType);
                     let productListNow = 0;
                     if (productList.length === 0) {
                         let resp = await apTaskDrawAward(task.id, task.taskType);
-
+                        await $.await(30000);
                         if (!resp.success) {
                             $.log(`${task.taskTitle}|${task.taskShowTitle} 领取完成!`)
+                            await $.await(30000);
                             productList = await apTaskDetail(task.id, task.taskType);
 
                         }
@@ -107,7 +110,7 @@ message = ""
                         }
                         $.log(`${task.taskTitle} ${task.taskDoTimes}/${task.taskLimitTimes}`);
                         let resp = await apDoTask(task.id, task.taskType, productList[productListNow].itemId, productList[productListNow].appid);
-
+                        await $.await(30000);
                         if (resp.code === 2005 || resp.code === 0) {
                             $.log(`${task.taskTitle}|${task.taskShowTitle} 任务完成！`)
                         } else {
@@ -122,7 +125,7 @@ message = ""
                     //领
                     for (let j = 0; j < task.taskLimitTimes; j++) {
                         let resp = await apTaskDrawAward(task.id, task.taskType);
-
+                        await $.await(30000);
                         if (!resp.success) {
                             $.log(`${task.taskTitle}|${task.taskShowTitle} 领取完成!`)
                             break
@@ -131,7 +134,7 @@ message = ""
                 } else if (task.taskType === 'SHARE_INVITE') {
                     for (let j = 0; j < 5; j++) {
                         let resp = await apTaskDrawAward(261, 'SHARE_INVITE');
-
+                        await $.await(30000);
                         if (!resp.success) {
                             break
                         }
@@ -141,8 +144,10 @@ message = ""
                 if (task.taskType === 'BROWSE_CHANNEL' && task.taskLimitTimes === 1) {
                     $.log(`${task.taskTitle}|${task.taskShowTitle}`)
                     await apDoTask2(task.id, task.taskType, task.taskSourceUrl);
+                    await $.await(30000);
                     $.log(`${task.taskTitle}|${task.taskShowTitle} 领取奖励`)
                     await apTaskDrawAward(task.id, task.taskType);
+                    await $.await(30000);
                 }
                 if (task.taskType === 'SHARE_INVITE') {
                     $.yq_taskid = task.id
