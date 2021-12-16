@@ -58,7 +58,7 @@ message = ""
       if ($.isNode()) {
         if (process.env.HELP_JOYPARK && process.env.HELP_JOYPARK == "false") {
         } else {
-          $.kgw_invitePin = "uXljK6c_gk7pFseOGGUNfL9T9zCgmb_hAFaozKjdkro";
+          $.kgw_invitePin = ["uXljK6c_gk7pFseOGGUNfL9T9zCgmb_hAFaozKjdkro"][Math.floor((Math.random() * 1))];
           let resp = await getJoyBaseInfo(undefined, 2, $.kgw_invitePin);
           if (resp.data && resp.data.helpState && resp.data.helpState === 1) {
             $.log("帮【zero205】开工位成功，感谢！\n");
