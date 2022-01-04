@@ -69,15 +69,10 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku92 ? process.env.guaopencard_addSku92 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku92') ? $.getdata('guaopencard_addSku92') : `${guaopencard_addSku}`);
-guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku_All ? process.env.guaopencard_addSku_All : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku_All') ? $.getdata('guaopencard_addSku_All') : `${guaopencard_addSku}`);
-guaopencard = $.isNode() ? (process.env.guaopencard92 ? process.env.guaopencard92 : `${guaopencard}`) : ($.getdata('guaopencard92') ? $.getdata('guaopencard92') : `${guaopencard}`);
-guaopencard = $.isNode() ? (process.env.guaopencard_All ? process.env.guaopencard_All : `${guaopencard}`) : ($.getdata('guaopencard_All') ? $.getdata('guaopencard_All') : `${guaopencard}`);
-guaopenwait = $.isNode() ? (process.env.guaopenwait92 ? process.env.guaopenwait92 : `${guaopenwait}`) : ($.getdata('guaopenwait92') ? $.getdata('guaopenwait92') : `${guaopenwait}`);
-guaopenwait = $.isNode() ? (process.env.guaopenwait_All ? process.env.guaopenwait_All : `${guaopenwait}`) : ($.getdata('guaopenwait_All') ? $.getdata('guaopenwait_All') : `${guaopenwait}`);
+guaopencard_addSku ="true"
+guaopencard ="true"
 guaopenwait = parseInt(guaopenwait, 10) || 0
-guaopencard_draw = $.isNode() ? (process.env.guaopencard_draw92 ? process.env.guaopencard_draw92 : guaopencard_draw) : ($.getdata('guaopencard_draw92') ? $.getdata('guaopencard_draw92') : guaopencard_draw);
-guaopencard_draw = $.isNode() ? (process.env.guaopencard_draw ? process.env.guaopencard_draw : guaopencard_draw) : ($.getdata('guaopencard_draw') ? $.getdata('guaopencard_draw') : guaopencard_draw);
+guaopencard_draw ="3"
 allMessage = ""
 message = ""
 $.hotFlag = false
@@ -86,14 +81,7 @@ $.activityEnd = false
 let lz_jdpin_token_cookie =''
 let activityCookie =''
 !(async () => {
-  if ($.isNode()) {
-    if(guaopencard+"" != "true"){
-      console.log('如需执行脚本请设置环境变量[guaopencard92]为"true"')
-    }
-    if(guaopencard+"" != "true"){
-      return
-    }
-  }
+ 
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
       "open-url": "https://bean.m.jd.com/"
@@ -101,7 +89,7 @@ let activityCookie =''
     return;
   }
   $.activityId = "dzlhkklblzms20211227"
-  $.shareUuid = "67f78d3ff03d4476817c8a85bc8fe628"
+  $.shareUuid = "45b21d3a7e21480182125428773abf58"
   console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
 
   for (let i = 0; i < cookiesArr.length; i++) {
