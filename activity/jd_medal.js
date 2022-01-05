@@ -4,9 +4,9 @@ cron 16 7,16 * * * jd_medal.js
 TG频道：https://t.me/sheeplost
  */
 const $ = new Env('农场集勋章');
-const notify = $.isNode() ? require('./sendNotify') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message = ''; ;
 if ($.isNode()) {
