@@ -85,6 +85,14 @@ let pool = []
       }
     }
 
+    function randomString(e) {
+      e = e || 32;
+      let t = "abcdef0123456789", a = t.length, n = "";
+      for (i = 0; i < e; i++)
+        n += t.charAt(Math.floor(Math.random() * a));
+      return n
+    }
+
     inviteCodes = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/city.json')
     if (!inviteCodes) {
       $.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/city.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
