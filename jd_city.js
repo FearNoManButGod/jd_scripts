@@ -41,6 +41,8 @@ let self_code = []
   } else {
     console.log(`脚本不会自动抽奖，建议活动快结束开启，默认关闭(在1.18日自动开启抽奖),如需自动抽奖请设置环境变量  JD_CITY_EXCHANGE 为true`);
   }
+  console.log(`如需换助力请设置环境变量 JD_CITY_SHARECODES `);
+
   for (let i = 0; i < cookiesArr.length && true; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -89,7 +91,6 @@ let self_code = []
         }
         continue
       }
-      console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       await shareCodesFormat();
       await getUA()
       for (let i = 0; i < $.newShareCodes.length && true; ++i) {
