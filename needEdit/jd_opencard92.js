@@ -44,8 +44,8 @@ let guaopenwait = "0"
 let guaopencard_draw = "0"
 
 const $ = new Env('12.31~1.9 大牌联合 年货盛宴');
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 let cleanCart = ''
 if($.isNode()){
   try{

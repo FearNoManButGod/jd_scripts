@@ -1,8 +1,5 @@
 /*
-  https://st.jingxi.com/fortune_island/index2.html
-
-  18 0,6-23/2 * * * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_wealth_island.js 财富大陆
-
+cron "18 0,6-23/2 * * *" script-path=https://raw.githubusercontent.com/smiek2121/scripts/master/gua_wealth_island.js,tag=财富大陆
 */
 
 const $ = new Env('财富大陆');

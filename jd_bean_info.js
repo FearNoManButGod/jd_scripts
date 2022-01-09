@@ -51,7 +51,10 @@ if ($.isNode()) {
 
   if ($.isNode() && allMessage) {
     await notify.sendNotify(`${$.name}`, `${allMessage}`, { url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean` })
+  }else{
+    $.msg($.name, `${allMessage}`);
   }
+
 })()
     .catch((e) => {
       // $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
