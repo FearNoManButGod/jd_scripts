@@ -385,15 +385,13 @@ function readShareCode() {
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
-    // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
     $.newShareCodes = [];
     const readShareCodeRes = await readShareCode();
-   // $.readShareCode = (readShareCodeRes && readShareCodeRes.data) || []
-    $.readShareCode =[]
+    $.readShareCode = (readShareCodeRes && readShareCodeRes.data) || []
     if (readShareCodeRes && readShareCodeRes.code === 200) {
-      $.newShareCodes = [...new Set([...$.shareCodes, ...inviteCodes, ...$.readShareCode])];
+      $.newShareCodes = [...new Set([...$.shareCodes, ...$.readShareCode])];
     } else {
-      $.newShareCodes = [...new Set([...$.shareCodes, ...inviteCodes])];
+      $.newShareCodes = [...new Set([...$.shareCodes])];
     }
     console.log(`\n第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
