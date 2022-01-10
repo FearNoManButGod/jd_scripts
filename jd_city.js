@@ -41,7 +41,7 @@ let self_code = []
   } else {
     console.log(`脚本不会自动抽奖，建议活动快结束开启，默认关闭(在1.18日自动开启抽奖),如需自动抽奖请设置环境变量  JD_CITY_EXCHANGE 为true`);
   }
-  console.log(`如需换助力请设置环境变量 JD_CITY_CODES `);
+ 
 
   for (let i = 0; i < cookiesArr.length && true; i++) {
     if (cookiesArr[i]) {
@@ -65,14 +65,13 @@ let self_code = []
       await getInviteId();
     }
   }
- 
+  $.isHelp = true;
   inviteCodes = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/city.json')
   if (!inviteCodes) {
     $.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/city.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
     await $.wait(1000)
     inviteCodes = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/city.json')
   }
-
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -93,23 +92,26 @@ let self_code = []
       }
       await shareCodesFormat();
       await getUA()
-      for (let i = 0; i < $.newShareCodes.length && true; ++i) {
-        console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
-        let res = await getInfo($.newShareCodes[i])
-        if (res && res['data'] && res['data']['bizCode'] === 0) {
-          if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0] && res['data']['result']['toasts'][0]['status'] === '3') {
-            console.log(`助力次数已耗尽，跳出`)
+      if($.isHelp){
+        for (let i = 0; i < $.newShareCodes.length && true; ++i) {
+          console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
+          let res = await getInfo($.newShareCodes[i])
+          if (res && res['data'] && res['data']['bizCode'] === 0) {
+            if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0] && res['data']['result']['toasts'][0]['status'] === '3') {
+              console.log(`助力次数已耗尽，跳出`)
+              break
+            }
+            if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0]) {
+              console.log(`助力 【${$.newShareCodes[i]}】:${res.data.result.toasts[0].msg}`)
+            }
+          }
+          if ((res && res['status'] && res['status'] === '3') || (res && res.data && res.data.bizCode === -11)) {
+            // 助力次数耗尽 || 黑号
             break
           }
-          if (res['data']['result']['toasts'] && res['data']['result']['toasts'][0]) {
-            console.log(`助力 【${$.newShareCodes[i]}】:${res.data.result.toasts[0].msg}`)
-          }
-        }
-        if ((res && res['status'] && res['status'] === '3') || (res && res.data && res.data.bizCode === -11)) {
-          // 助力次数耗尽 || 黑号
-          break
         }
       }
+    
       // await getInfo($.newShareCodes[i], true)
       await getInviteInfo();//雇佣
       if (exchangeFlag+"" == "true") {
@@ -350,15 +352,10 @@ function shareCodesFormat() {
     if (scs) {
          self_code = scs.split("&")
          console.log(`你提供了助力码${self_code}，将只为这些助力。`)
-         $.newShareCodes = [...new Set([...self_code])]
+         $.newShareCodes = [...new Set([...self_code,...inviteCodes])]
     }else{
-        if ($.index == 1) {
-              console.log('首个帐号,助力作者和池子')
-              $.newShareCodes = [...new Set([...inviteCodes])]
-        } else {
-              console.log('非首个个帐号,优先向前助力')
-              $.newShareCodes = [...new Set([...inviteCodes, ...$.shareCodes])]
-        }
+      console.log(`请设置环境变量 JD_CITY_CODES `);
+      $.isHelp = false;
     }
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
