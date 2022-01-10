@@ -1,9 +1,9 @@
 /*
 逛京东会场
 自定义环境变量 ACT_URL 为json地址，格式参考默认
-0 0 * * * jd_mall.js
+0 0 * * * jd_mall_active.js
 */
-const $ = new Env("逛会场任务");
+const $ = new Env("逛京东会场");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 let cookiesArr = [], cookie;
 let actURL = ''
@@ -14,7 +14,7 @@ if ($.isNode()) {
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === "false")
     console.log = () => {};
   if (process.env.ACT_URL && process.env.ACT_URL === '') console.log = () => {};
-  actURL = process.env.ACT_URL || 'https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/mall_active.json'
+  actURL = process.env.ACT_URL || 'https://gitee.com/fatelight/code/raw/master/mall_active.json'
 } else {
   cookiesArr = [$.getdata("CookieJD"), $.getdata("CookieJD2"), ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
@@ -51,7 +51,7 @@ if ($.isNode()) {
       }
     }
   } else {
-    console.log('当前不在任务时间，请在活动时间内运行脚本')
+    console.log('请正确配置自定义环境变量 ACT_URL 为json地址，格式参考默认')
   }
 
 })()

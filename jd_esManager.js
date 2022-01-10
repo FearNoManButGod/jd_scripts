@@ -261,6 +261,7 @@ function dealReturn(type, data) {
       }
       break;
     case 'task':
+      console.log(data);
       if (data.status === '0') {
         $.taskList = data.body.task_vos;
       } else {

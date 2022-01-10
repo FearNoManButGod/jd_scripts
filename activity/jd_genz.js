@@ -5,8 +5,8 @@ cron 37 0,11 * * * jd_genz.js
 TG频道:https://t.me/sheeplost
 */
 const $ = new Env("芥么赚豪礼");
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 let cookiesArr = [], cookie = ''
 let appid = "yX3KNttlA6GbZjHuDz0-WQ", typeid = "44782287613952";
 if ($.isNode()) {

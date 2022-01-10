@@ -5,9 +5,9 @@ https://prodev.m.jd.com/mall/active/3Q4roJtRWzTom2stXm6wEJTH8H2w/index.html
 27 10,16 * 12 * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_UnknownTask9.js
 */
 const $ = new Env('发现好货');
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
 
-const notify = $.isNode() ? require('./sendNotify') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [],
     cookie = '';
