@@ -300,6 +300,7 @@ async function slaveHelp() {
     } else {
       console.log(`助力好友结果: ${response.message}`);
     }
+    await $.wait(2000)
   }
   if (helpPeoples && helpPeoples.length > 0) {
     message += `【您助力的好友】${helpPeoples.substr(0, helpPeoples.length - 1)}\n`;
@@ -318,6 +319,10 @@ async function petSport() {
     if (resultCode == 0) {
       let sportRevardResult = await request('getSportReward');
       console.log(`领取遛狗奖励完成: ${JSON.stringify(sportRevardResult)}`);
+    } else if (resultCode == 1013) {
+      let sportRevardResult = await request('getSportReward', {"version":1});
+      console.log(`领取遛狗奖励完成: ${JSON.stringify(sportRevardResult)}`);
+      if (sportRevardResult.resultCode == 0) resultCode = 0
     }
     times++;
   } while (resultCode == 0 && code == 0)
@@ -536,13 +541,13 @@ function requireConfig() {
     }
     // console.log(`$.shareCodesArr::${JSON.stringify($.shareCodesArr)}`)
     // console.log(`jdPetShareArr账号长度::${$.shareCodesArr.length}`)
-    console.log(`您提供了${$.shareCodesArr.length}个账号的东东萌宠助力码\n`);
-	$.authorCode = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/jd_pet.json')
-	if (!$.authorCode) {
-		$.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_pet.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
-		await $.wait(1000)
-		$.authorCode = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_pet.json') || []
-	}
+    console.log(`您提供了${$.shareCodesArr.length}个账号的东东萌宠助力码\n`);	
+    $.authorCode = await getAuthorShareCode('https://raw.githubusercontent.com/FearNoManButGod/AuthorCode/main/jd_pet.json')
+    if (!$.authorCode) {
+      $.http.get({url: 'https://purge.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_pet.json'}).then((resp) => {}).catch((e) => $.log('刷新CDN异常', e));
+      await $.wait(1000)
+      $.authorCode = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/FearNoManButGod/AuthorCode@main/jd_pet.json') || []
+    }
     resolve()
   })
 }
@@ -623,7 +628,7 @@ function taskUrl(function_id, body = {}) {
   body["channel"] = 'app';
   return {
     url: `${JD_API_HOST}?functionId=${function_id}`,
-    body: `body=${escape(JSON.stringify(body))}&appid=wh5&loginWQBiz=pet-town&clientVersion=9.0.4`,
+    body: `body=${encodeURIComponent(JSON.stringify(body))}&appid=wh5&loginWQBiz=pet-town&clientVersion=9.0.4`,
     headers: {
       'Cookie': cookie,
       'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
