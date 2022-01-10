@@ -41,7 +41,7 @@ let self_code = []
   } else {
     console.log(`脚本不会自动抽奖，建议活动快结束开启，默认关闭(在1.18日自动开启抽奖),如需自动抽奖请设置环境变量  JD_CITY_EXCHANGE 为true`);
   }
-  console.log(`如需换助力请设置环境变量 JD_CITY_SHARECODES `);
+  console.log(`如需换助力请设置环境变量 JD_CITY_CODES `);
 
   for (let i = 0; i < cookiesArr.length && true; i++) {
     if (cookiesArr[i]) {
@@ -346,19 +346,19 @@ function city_lotteryAward() {
 function shareCodesFormat() {
   return new Promise(async resolve => {
     $.newShareCodes = []
-    var scs = process.env.JD_CITY_SHARECODES
+    var scs = process.env.JD_CITY_CODES
     if (scs) {
          self_code = scs.split("&")
          console.log(`你提供了助力码${self_code}，将只为这些助力。`)
          $.newShareCodes = [...new Set([...self_code])]
     }else{
-     if ($.index == 1) {
-           console.log('首个帐号,助力作者和池子')
-           $.newShareCodes = [...new Set([...inviteCodes, ...$.shareCodes])]
-     } else {
-           console.log('非首个个帐号,优先向前助力')
-           $.newShareCodes = [...new Set([...inviteCodes, ...$.shareCodes])]
-     }
+        if ($.index == 1) {
+              console.log('首个帐号,助力作者和池子')
+              $.newShareCodes = [...new Set([...inviteCodes])]
+        } else {
+              console.log('非首个个帐号,优先向前助力')
+              $.newShareCodes = [...new Set([...inviteCodes, ...$.shareCodes])]
+        }
     }
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
