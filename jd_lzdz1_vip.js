@@ -2,7 +2,7 @@ const $ = new Env("会员狂欢日");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
-let ownCode = {};
+let ownCode = null;
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -37,8 +37,7 @@ if ($.isNode()) {
                 continue
             }
             authorCodeList = [
-                'c419b313f6e742d99f7bebdd370f0876',
-                // '3da8d0ddfaa14c608a0144eaf7417064',
+                'c419b313f6e742d99f7bebdd370f0876'
             ]
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
@@ -201,7 +200,7 @@ function task(function_id, body, isCommon = 0) {
                                         $.log(`开启【${data.data.activityName}】活动`)
                                         $.log("-------------------")
                                         if ($.index === 1) {
-                                            ownCode['actorUuid'] = data.data.actorUuid
+                                            ownCode = data.data.actorUuid
                                             console.log(ownCode)
                                         }
                                         $.activityContent = data.data;
