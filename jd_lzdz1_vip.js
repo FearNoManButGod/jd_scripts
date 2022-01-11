@@ -37,7 +37,7 @@ if ($.isNode()) {
                 continue
             }
             authorCodeList = [
-                'fa9c467ab3b240c5a3c4c3a0cf9a4c1e',
+                'c419b313f6e742d99f7bebdd370f0876',
                 // '3da8d0ddfaa14c608a0144eaf7417064',
             ]
             $.bean = 0;
