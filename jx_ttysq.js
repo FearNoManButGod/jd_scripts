@@ -57,9 +57,9 @@ const JD_API_HOST = `https://m.jingxi.com`;
             }
         }
     }
-    let res = await getAuthorShareCode('')
+    let res = await getAuthorShareCode('https://raw.githubusercontent.com/shufflewzc/updateTeam/main/shareCodes/ttysq2.json')
     if (!res) {
-        res = await getAuthorShareCode('')
+        res = await getAuthorShareCode('https://raw.fastgit.org/shufflewzc/updateTeam/main/shareCodes/ttysq2.json')
     }
     if (res) {
         authorCode = res.sort(() => 0.5 - Math.random())
@@ -212,7 +212,7 @@ async function main() {
         await task(`jxnhj/GetUserInfo`, `strInviteId=&nopopup=0`, show = false)
         if ($.lotteryNum >= 1) {
             for (let w = 0; w < $.lotteryNum; w++) {
-                console.log(`可以抽奖${$.lotteryNum}次 ==>>第${w+1}次抽奖`)
+                console.log(`可以抽奖${$.lotteryNum}次 ==>>第${w+1}次抽奖`)
                 await task(`jxnhj/GreetUpgrade`)
                 await $.wait(1000)
             }
