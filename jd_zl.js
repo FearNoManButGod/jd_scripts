@@ -60,7 +60,7 @@ async function jdMs() {
 
 function getActInfo() {
   return new Promise(resolve => {
-    $.post(taskPostUrl('assignmentList', {}, 'appid=jwsp'), (err, resp, data) => {
+    $.post(taskPostUrl(), (err, resp, data) => {
       try {
         if (err) {
           console.log(`${err},${jsonParse(resp.body)['message']}`)
