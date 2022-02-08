@@ -204,7 +204,7 @@ function taskUrl(function_id, body = '') {
       'Accept-Language': 'zh-cn',
       'Content-Type': 'application/json;charset=utf-8',
       'Origin': 'wq.jd.com',
-      'User-Agent': 'JD4iPhone/167490 (iPhone; iOS 14.2; Scale/3.00)',
+      'User-Agent': 'JD4iPhone/10.3.6 CFNetwork/1209 Darwin/20.2.0',
       'Referer': `${jd_nzmhurl}?wxAppName=jd`,
       'Cookie': cookie
     }
