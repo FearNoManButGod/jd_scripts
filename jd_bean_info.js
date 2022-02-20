@@ -49,8 +49,8 @@ if ($.isNode()) {
     }
   }
 
-  console.log(`${allMessage}`);
   if ($.isNode() && allMessage) {
+    $.msg($.name, '', `【京东账号${$.index}】${$.nickName}\n${allMessage}`);
     await notify.sendNotify(`${$.name}`, `${allMessage}`, { url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean` })
   }
 })()
