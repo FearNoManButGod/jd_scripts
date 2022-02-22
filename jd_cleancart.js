@@ -35,9 +35,10 @@ pin3@&@不清空👉该pin不清空
 防止没指定的账号购物车全清空
 
 */
-let jdSignUrl = 'https://jd.smiek.tk/jdcleancatr_21102717' // 算法url
+let jdSignUrl = '' // 算法url
 let cleancartRun = 'false'
-let cleancartProducts = '*@&@'
+let cleancartProducts = ''
+let isSignError = false;
 
 const $ = new Env('清空购物车');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -122,7 +123,25 @@ async function run(){
   try{
     let msg = ''
     let signBody = `{"homeWishListUserFlag":"1","userType":"0","updateTag":true,"showPlusEntry":"2","hitNewUIStatus":"1","cvhv":"049591","cartuuid":"hjudwgohxzVu96krv/T6Hg==","adid":""}`
-    let body = await jdSign('cartClearQuery', signBody)
+    let body = await GetjdSign('cartClearQuery', signBody)
+	if (isSignError) {
+	    console.log(`Sign获取失败,等待2秒后再次尝试...`)
+	    await $.wait(2 * 1000);
+	    isSignError = false;
+	    body = await GetjdSign('cartClearQuery', signBody);
+	}
+	if (isSignError) {
+	    console.log(`Sign获取失败,等待2秒后再次尝试...`)
+	    await $.wait(2 * 1000);
+	    isSignError = false;
+	    body = await GetjdSign('cartClearQuery', signBody);
+	}
+	if (isSignError) {
+	    console.log(`Sign获取失败,等待2秒后再次尝试...`)
+	    await $.wait(2 * 1000);
+	    isSignError = false;
+	    body = await GetjdSign('cartClearQuery', signBody);
+	}	
     if($.out) return
     if(!body){
       console.log('获取不到算法')
@@ -170,7 +189,27 @@ async function run(){
               msg += `清空${operNum}件商品|没有找到要清空的商品\n`
             }else{
               let clearBody = `{"homeWishListUserFlag":"1","userType":"0","updateTag":false,"showPlusEntry":"2","hitNewUIStatus":"1","cvhv":"049591","cartuuid":"hjudwgohxzVu96krv/T6Hg==","operations":${$.toStr(operations,operations)},"adid":"","coord_type":"0"}`
-              clearBody = await jdSign('cartClearRemove', clearBody)
+              isSignError = false;
+			  clearBody = await GetjdSign('cartClearRemove', clearBody);
+              if (isSignError) {
+                  console.log(`Sign获取失败,等待2秒后再次尝试...`)
+                  await $.wait(2 * 1000);
+                  isSignError = false;
+                  clearBody = await GetjdSign('cartClearRemove', clearBody);
+              }
+			  if (isSignError) {
+                  console.log(`Sign获取失败,等待2秒后再次尝试...`)
+                  await $.wait(2 * 1000);
+                  isSignError = false;
+                  clearBody = await GetjdSign('cartClearRemove', clearBody);
+              }
+			  if (isSignError) {
+                  console.log(`Sign获取失败,等待2秒后再次尝试...`)
+                  await $.wait(2 * 1000);
+                  isSignError = false;
+                  clearBody = await GetjdSign('cartClearRemove', clearBody);
+              }
+	
               if($.out) return
               if(!clearBody){
                 console.log('获取不到算法')
@@ -256,60 +295,40 @@ function jdApi(functionId,body) {
   })
 }
 
-function jdSign(fn,body) {
-  let sign = ''
-  let flag = false
-  try{
-    const fs = require('fs');
-    if (fs.existsSync('./gua_encryption_sign.js')) {
-      const encryptionSign = require('./gua_encryption_sign');
-      sign = encryptionSign.getSign(fn, body)
-    }else{
-      flag = true
-    }
-    sign = sign.data && sign.data.sign && sign.data.sign || ''
-  }catch(e){
-    flag = true
-  }
-  if(!flag) return sign
-  if(!jdSignUrl.match(/^https?:\/\//)){
-    console.log('请填写算法url')
-    $.out = true
-    return ''
-  }
-  return new Promise((resolve) => {
-    let url = {
-      url: jdSignUrl,
-      body:`{"fn":"${fn}","body":${body}}`,
-      followRedirect:false,
-      headers: {
-        'Accept':'*/*',
-        "accept-encoding": "gzip, deflate, br",
-        'Content-Type': 'application/json',
-      },
-      timeout:30000
-    }
-    $.post(url, async (err, resp, data) => {
-      try {
-        // console.log(data)
-        let res = $.toObj(data,data)
-        if(typeof res === 'object' && res){
-          if(res.code && res.code == 200 && res.msg == "ok" && res.data){
-            if(res.data.sign) sign = res.data.sign || ''
-            if(sign != '') resolve(sign)
-          }else{
-            console.log(data)
-          }
-        }else{
-          console.log(data)
-        }
-      } catch (e) {
-        $.logErr(e, resp);
-      } finally {
-        resolve('')
-      }
-    })
-  })
+function GetjdSign(functionid, body) {
+	return new Promise(async resolve => {
+		let data = {
+			"functionId": functionid,
+			"body": body,
+			"client": "apple",
+			"clientVersion": "10.1.0"
+		}
+		let HostArr = ['jdsign.cf', 'signer.nz.lu']
+		let Host = HostArr[Math.floor((Math.random() * HostArr.length))]
+			let options = {
+			url: `https://cdn.nz.lu/ddo`,
+			body: JSON.stringify(data),
+			headers: {
+				Host,
+				"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+			},
+			timeout: 15000
+		}
+		$.post(options, (err, resp, data) => {
+			try {
+				if (err) {
+					console.log(`${JSON.stringify(err)}`);
+					isSignError = true;
+					//console.log(`${$.name} getSign API请求失败，请检查网路重试`)
+				} else {}
+			} catch (e) {
+				$.logErr(e, resp)
+			}
+			finally {
+				resolve(data);
+			}
+		})
+	})
 }
 
 

@@ -4,8 +4,8 @@ cron 36 2,13 * * * year.js
 TG频道：https://t.me/sheeplost
 */
 const $ = new Env("京东超市年货日历");
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 let cookiesArr = [], cookie = '';
 $.shareCodes = [];
 if ($.isNode()) {

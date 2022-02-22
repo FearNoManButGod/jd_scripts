@@ -17,8 +17,8 @@ cron "2 0,17 * * *" script-path=https://raw.githubusercontent.com/jiulan/platypu
 东东世界兑换 = type=cron,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_ddworld.js, cronexpr="2 0,17 * * *", timeout=3600, enable=true
  */
 const $ = new Env("东东世界兑换");
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 let cookiesArr = [], cookie = ''
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
