@@ -1,6 +1,6 @@
 /*
 #女装盲盒抽京豆任务，自行加入一下环境变量
-export jd_nzmhurl="https://anmp.jd.com/babelDiy/Zeus/2x36jyruNVDWxUiAiGAgHRrkqVX2/index.html"
+export jd_nzmhurl="https://anmp.jd.com/babelDiy/Zeus/3z12ngsd27UR1KfRqdMrMSSg3uxg/index.html';
 
 cron 35 1,23 * * *
  */
@@ -11,7 +11,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
-let jd_nzmhurl = 'https://anmp.jd.com/babelDiy/Zeus/3ZHWXfEDpu5GyX1BgCEN3qQwrC4K/index.html';
+let jd_nzmhurl = 'https://anmp.jd.com/babelDiy/Zeus/3z12ngsd27UR1KfRqdMrMSSg3uxg/index.html';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -153,9 +153,13 @@ function doTask(taskId) {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           data = JSON.parse(data.match(/query\((.*)\n/)[1])
-          if (data.data.complete_task_list.includes(taskId)) {
-            console.log(`任务完成成功，当前幸运值${data.data.curbless}`)
-            $.userInfo.bless = data.data.curbless
+          if (data.errcode === 8004) {
+            console.log(`任务完成失败，无效任务ID`)
+          } else {
+            if (data.data.complete_task_list.includes(taskId)) {
+              console.log(`任务完成成功，当前幸运值${data.data.curbless}`)
+              $.userInfo.bless = data.data.curbless
+            }
           }
         }
       } catch (e) {
