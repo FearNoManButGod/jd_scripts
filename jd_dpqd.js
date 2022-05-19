@@ -1,23 +1,17 @@
 /*
-cron 0 0 * * * jd_dpqd.js
 店铺签到，各类店铺签到，有新的店铺直接添加token即可
-搬运cui521大佬脚本，请勿外传！！！
-环境变量:
-DPQDTK: token1&token2
-仓库不再提供token
+============Quantumultx===============
+[task_local]
+#店铺签到
+15 2,14 * * * https://raw.githubusercontent.com/KingRan/KR/main/jd_shop_sign.js, tag=店铺签到, enabled=true
+===========Loon============
+[Script]
+cron "15 2,14 * * *" script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_shop_sign.js,tag=店铺签到
+============Surge=============
+店铺签到 = type=cron,cronexp="15 2,14 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_shop_sign.js
+===========小火箭========
+店铺签到 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_shop_sign.jss, cronexpr="15 2,14 * * *", timeout=3600, enable=true
 */
-let token = []
-if (process.env.DPQDTK) {
-  if (process.env.DPQDTK.includes('\n')) {
-    token = [...process.env.DPQDTK.split('\n'),...token]
-  } else {
-    token = [...process.env.DPQDTK.split('&'),...token]
-  }
-}
-if (!token.length) {
-  console.log('无店铺签到token,不执行.需自备token:环境变DPQDTK: tk1&tk2.')
-  return
-}
 const $ = new Env('店铺签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -30,6 +24,35 @@ let activityId=''
 let vender=''
 let num=0
 let shopname=''
+const token = [
+  "183F4F645F31082153CDD0DEE824DF3A",
+  "87DC11A01AE814025159ECE32F5EECBF",
+  "30FB5875B47D353278D22C6FBED0F137",
+  "4C57E19D0FB3F0ABDC41EA01D5F5F6EA",
+  "8622A6A8C1ECB4B2D45F07AE43397BFD",
+  "DB00412CD5F5853526FB3A3B1662A7F3",
+  "CACEC89AD3A20309748FEC03B0B0C50C",
+  "D881655EDC90A9B4387ACFE495CA3F18",
+  "35F3ED7E5BDFCE58F95E01695927EC24",
+  "38D442F3EDAF8377B3F948055E69B225",
+  "3AF4B68A4BB3BD09D371B766E6A1B721",
+  "273EC9E9CA27DFDD85478972A1A0ED6F",
+  "183F4F645F31082153CDD0DEE824DF3A",
+  "DB67ED9F116CFA3CBB75055C61ED3364",
+  "99B695DFEF69DD31BB78B58D61B9C6A2",
+  "6CB820BAC6C0CD8D1F90C342F0EA1018",
+  "ADF510FDA71E07151B8F8AD4964A5D90",
+  "37F05E334A3F6D36E54E13892CE379A9",
+  "7403517C61675D4DEF67C2A63366245B",
+  "71DC699CFECAD1BBA618F412D8B54943",
+  "038B83D1D0D374F58821C7EDC4F3B5AE",
+  "0EED5C32E8002D6EF892D3995A0A9AA5",
+  "6F7AC3A26B2A037215596E139BEB15AF",
+  "D9CC2C9A52D3B8C5A856B23299B7A64E",
+  "7516691B34E89137D3C911BBF7D86ACD",
+  "CD9B964213BB6DA6CBC491BD0C8D58C6",
+  "7FF322D4E43DE76490EE05DBB79BF2C5"
+]
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
