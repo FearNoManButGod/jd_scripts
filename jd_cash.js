@@ -93,6 +93,7 @@ jdPandaToken = $.isNode() ? (process.env.PandaToken ? process.env.PandaToken : `
     .finally(() => {
       $.done();
     })
+
 async function jdCash() {
   $.signMoney = 0;
   await mob_sign()
@@ -291,20 +292,19 @@ function getSignfromPanda(functionId, body) {
         let url = {
             url: "https://api.zhezhe.cf/jd/sign",
             body: JSON.stringify(data),
-		    followRedirect: false,
-		    headers: {
-		        'Accept': '*/*',
-		        "accept-encoding": "gzip, deflate, br",
-		        'Content-Type': 'application/json',
-				'Authorization': 'Bearer ' + jdPandaToken
-		    },
-		    timeout: 30000
+		        followRedirect: false,
+            headers: {
+                'Accept': '*/*',
+                "accept-encoding": "gzip, deflate, br",
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jdPandaToken
+            },
+		        timeout: 30000
         }
         $.post(url, async(err, resp, data) => {
             try {				
-                data = JSON.parse(data);				
-				
-				if (data && data.code == 200) {
+              data = data && JSON.parse(data) || data;
+				       if (data && data.code == 200) {
                     lnrequesttimes = data.request_times;
                     console.log("连接Panda服务成功，当前Token使用次数为" + lnrequesttimes);
                     if (data.data.sign)
@@ -316,12 +316,11 @@ function getSignfromPanda(functionId, body) {
                 } else {
                     console.log("签名获取失败.");
                 }
-				
             }catch (e) {
                 $.logErr(e, resp);
             }finally {
-				resolve(strsign);
-			}
+			      	resolve(strsign);
+		       	}
         })
     })
 }
