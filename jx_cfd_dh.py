@@ -66,7 +66,7 @@ cfd_offset_time = 0.01
 # 获取cookie等参数
 u_pin, u_cookie = get_cookie()
 #cfd_url=JxCFD(u_cookie['value']).get_cfd_url()
-cfd_url='https://m.jingxi.com/jxbfd/user/ExchangePrize?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=1653007914598&ptag=7155.9.47&dwType=3&dwLvl=1&ddwPaperMoney=100000&strPoolName=jxcfd2_exchange_hb_202205&strPgtimestamp=1653007914584&strPhoneID=bafafda19a90cfb8bf9470e11fe3ba7c31b6ed92&strPgUUNum=9fea667b00f7450c6cd260378a9c7d4b&_stk=_cfd_t,bizCode,ddwPaperMoney,dwEnv,dwLvl,dwType,ptag,source,strPgUUNum,strPgtimestamp,strPhoneID,strPoolName,strZone&_ste=1&h5st=20220520085154598;8253607859479153;92a36;tk02wb9cd1ca018ndKcpuROamyZn+01MJIA1TZraf0jRNrei+xP5eqZn6jVNZyOmTuyO8BTQCBfyTp7ep2knJuXGkAm+;41ff481f69cec2c7e2e7153c28c688153b0a12ddc93dc686d5f78f79c1fae27f;3.0;1653007914598&_=1653007914600&sceneval=2&g_login_type=1&callback=jsonpCBKT&g_ty=ls&appCode=msd1188198'
+cfd_url='https://m.jingxi.com/jxbfd/user/ExchangePrize?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&dwType=3&dwLvl=1&ddwPaperMoney=100000&strPoolName=jxcfd2_exchange_hb_202205&sceneval=2&g_login_type=1'
 
 
 
