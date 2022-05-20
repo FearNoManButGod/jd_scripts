@@ -136,7 +136,7 @@ async function jdBeanHome() {
     await getUserInfo()
     await $.wait(1000)
     await getTaskList();
-    await receiveJd2();
+    //await receiveJd2();
 
     //await morningGetBean()
     //await $.wait(1000)
