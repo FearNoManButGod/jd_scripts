@@ -49,6 +49,7 @@ let allMessage = '';
 let jdPandaToken = '';
 jdPandaToken = $.isNode() ? (process.env.PandaToken ? process.env.PandaToken : `${jdPandaToken}`) : ($.getdata('PandaToken') ? $.getdata('PandaToken') : `${jdPandaToken}`);
 
+
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -56,9 +57,8 @@ jdPandaToken = $.isNode() ? (process.env.PandaToken ? process.env.PandaToken : `
   }
   if (!jdPandaToken) {
     console.log('请填写Panda获取的Token,变量是PandaToken');
-    return;
-  }
-
+	return;
+}
  // await requireConfig()
   
   for (let i = 0; i < cookiesArr.length; i++) {
