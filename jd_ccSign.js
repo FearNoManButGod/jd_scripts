@@ -40,9 +40,16 @@ if ($.isNode()) {
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let allMessage = '';
+let jdPandaToken = '';
+jdPandaToken = $.isNode() ? (process.env.PandaToken ? process.env.PandaToken : `${jdPandaToken}`) : ($.getdata('PandaToken') ? $.getdata('PandaToken') : `${jdPandaToken}`);
+
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+    return;
+  }
+  if (!jdPandaToken) {
+    console.log('请填写Panda获取的Token,变量是PandaToken');
     return;
   }
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -148,39 +155,48 @@ async function ccSign(functionId, body) {
   })
 }
 function getSign(functionId, body) {
-  return new Promise(async resolve => {
-    let data = {
-      functionId,
-      body: JSON.stringify(body),
-      "client":"android",
-      "clientVersion":"10.3.2"
+  var strsign = '';
+	let data = {
+      "fn":functionId,
+      "body": body
     }
-    let HostArr = ['jdsign.cf', 'signer.nz.lu']
-    let Host = HostArr[Math.floor((Math.random() * HostArr.length))]
-    let options = {
-      url: `https://cdn.nz.lu/ddo`,
-      body: JSON.stringify(data),
-      headers: {
-        Host,
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-      },
-      timeout: 30 * 1000
-    }
-    $.post(options, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} getSign API请求失败，请检查网路重试`)
-        } else {
-
+    return new Promise((resolve) => {
+        let url = {
+            url: "https://api.zhezhe.cf/jd/sign",
+            body: JSON.stringify(data),
+		    followRedirect: false,
+		    headers: {
+		        'Accept': '*/*',
+		        "accept-encoding": "gzip, deflate, br",
+		        'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + jdPandaToken
+		    },
+		    timeout: 30000
         }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
+        $.post(url, async(err, resp, data) => {
+            try {				
+                data = JSON.parse(data);				
+				
+				if (data && data.code == 200) {
+                    lnrequesttimes = data.request_times;
+                    console.log("连接Panda服务成功，当前Token使用次数为" + lnrequesttimes);
+                    if (data.data.sign)
+                        strsign = data.data.sign || '';
+                    if (strsign != '')
+                        resolve(strsign);
+                    else
+                        console.log("签名获取失败,可能Token使用次数上限或被封.");
+                } else {
+                    console.log("签名获取失败.");
+                }
+				
+            }catch (e) {
+                $.logErr(e, resp);
+            }finally {
+				resolve(strsign);
+			}
+        })
     })
-  })
 }
 function getsecretPin(pin) {
   return new Promise(async resolve => {
