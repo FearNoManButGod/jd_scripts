@@ -19,21 +19,22 @@ let min: number[] = [0.02, 0.12, 0.3, 0.6, 0.7, 0.8, 1, 2], log: string = '', lo
   for (let [index, value] of cookiesArr.entries()) {
 	if(index < 1){
     try {
-	  cookie = value;
-      UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)![1])
-      console.log(`\n开始【京东账号${index + 1}】${UserName}\n`);
-      UA = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random() * 4 + 10)}.${Math.ceil(Math.random() * 4)};${randomString(40)}`
-      log = logs[getRandomNumberByRange(0, logs.length - 1)]
-      let random = log.match(/"random":"(\d+)"/)[1], log1 = log.match(/"log":"(.*)"/)[1]
-      console.log(log);
-      console.log(log1);
-      res = await api('h5launch', {"followShop": 0, "random": random, "log": log1, "sceneid": "JLHBhPageh5"})
-      console.log('活动初始化：', res.data.result.statusDesc)
-      await wait(1000)
+	  // cookie = value;
+    //   UserName = decodeURIComponent(cookie.match(/pt_pin=([^;]*)/)![1])
+    //   console.log(`\n开始【京东账号${index + 1}】${UserName}\n`);
+    //   UA = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random() * 4 + 10)}.${Math.ceil(Math.random() * 4)};${randomString(40)}`
+    //   log = logs[getRandomNumberByRange(0, logs.length - 1)]
+    //   let random = log.match(/"random":"(\d+)"/)[1], log1 = log.match(/"log":"(.*)"/)[1]
+    //   console.log(log);
+    //   console.log(log1);
+    //   res = await api('h5launch', {"followShop": 0, "random": random, "log": log1, "sceneid": "JLHBhPageh5"})
+    //   console.log('活动初始化：', res.data.result.statusDesc)
+    //   await wait(1000)
 
-      res = await api('h5activityIndex', {"isjdapp": 1})
-      console.log('红包ID：', res.data.result.redpacketInfo.id)
-      shareCodesSelf.push(res.data.result.redpacketInfo.id)
+    //   res = await api('h5activityIndex', {"isjdapp": 1})
+    //   console.log('红包ID：', res.data.result.redpacketInfo.id)
+     // shareCodesSelf.push(res.data.result.redpacketInfo.id)
+      shareCodesSelf.push('454912242')
       await wait(1000)
 	} catch (e) {
       console.log(e)
