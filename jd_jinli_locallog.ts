@@ -7,8 +7,8 @@
  */
 
  import axios from 'axios';
- import {logs} from './utils/jinli_log';
- import {getRandomNumberByRange, o2s, randomString, requireConfig, wait} from "./function/TS_USER_AGENTS";
+ import {logs} from './jinli_log';
+ import {getRandomNumberByRange, o2s, randomString, requireConfig, wait} from "./TS_USER_AGENTS";
  
  let cookie: string = '', res: any = '', UserName: string, UA: string = ''
  let shareCodesSelf: string[] = [], shareCodes: string[] = [], fullCode: string[] = []

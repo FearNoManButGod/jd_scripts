@@ -8,8 +8,8 @@ new Env('极速版汪汪赛跑');
 
 **/
 
-import {get, post, o2s, requireConfig, wait} from './function/TS_USER_AGENTS'
-import {H5ST} from "./function/h5st"
+import {get, post, o2s, requireConfig, wait} from './TS_USER_AGENTS'
+import {H5ST} from "./h5st"
 import {existsSync, readFileSync} from "fs";
 import {getDate} from "date-fns";
 

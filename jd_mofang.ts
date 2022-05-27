@@ -15,8 +15,8 @@ let rabbitToken: string = process.env.RABBIT_TOKEN || '', tg_id: string = proces
 
 !(async () => {
   dotenv.config()
-  if (existsSync('./utils/mf_log.ts')) {
-    mf_logs = require('./utils/mf_log').mf_logs
+  if (existsSync('./mf_log.ts')) {
+    mf_logs = require('./mf_log').mf_logs
   } else {
     console.log('./test/mf_log not found')
   }
