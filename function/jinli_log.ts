@@ -1,7 +1,0 @@
-let logs = [
-  
-]
-
-export {
-    logs
-}

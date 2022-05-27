@@ -7,8 +7,8 @@
  */
 
 import axios from "axios";
-import {zjdInit, zjdH5st} from "./function/zjdtool.js";
-import {o2s, wait, requireConfig} from "./function/TS_USER_AGENTS";
+import {zjdInit, zjdH5st} from "./utils/zjdtool.js";
+import {o2s, wait, requireConfig} from "./TS_USER_AGENTS";
 import {SHA256} from "crypto-js";
 
 let cookie: string = '', res: any = '', UserName: string
