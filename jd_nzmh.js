@@ -1,24 +1,22 @@
 /*
-#盲盒任务抽京豆，自行加入以下环境变量，多个活动用@连接
-export jd_mhurlList=""
+#女装盲盒抽京豆任务，自行加入一下环境变量
+export jd_nzmhurl="https://anmp.jd.com/babelDiy/Zeus/2x36jyruNVDWxUiAiGAgHRrkqVX2/index.html"
 
-即时任务，无需cron
+cron 35 1,23 * * *
  */
 
-const $ = new Env('盲盒任务抽京豆');
+const $ = new Env('女装盲盒抽京豆');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
-let jd_mhurlList = '';
-let jd_mhurlArr = [];  
-let jd_mhurl = '';
+let jd_nzmhurl = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
-  if (process.env.jd_mhurlList) jd_mhurlList = process.env.jd_mhurlList
+  if (process.env.jd_nzmhurl) jd_nzmhurl = process.env.jd_nzmhurl
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
@@ -28,10 +26,11 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {"open-url": "https://bean.m.jd.com/"});
     return;
   }
-  if (!jd_mhurlList) {
-    $.log(`暂时没有盲盒任务，改日再来～`);
+  if (!jd_nzmhurl) {
+    $.log(`暂时没有女装盲盒，改日再来～`);
     return;
   }
+  console.log(`新的女装盲盒已经准备好: ${jd_nzmhurl}，准备开始薅豆`);
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -50,15 +49,10 @@ if ($.isNode()) {
         }
         continue
       }
-      let jd_mhurlArr = jd_mhurlList.split("@");
-      for (let j = 0; j < jd_mhurlArr.length; j++) {
-      jd_mhurl = jd_mhurlArr[j]
-      console.log(`新的盲盒任务已经准备好: ${jd_mhurl}，准备开始薅豆`);
-        try {
-        await jdMh(jd_mhurl)
-        } catch (e) {
+      try {
+        await jdMh(jd_nzmhurl)
+      } catch (e) {
         $.logErr(e)
-        }
       }
     }
   }
@@ -102,7 +96,7 @@ function showMsg() {
 }
 
 function getInfo(url) {
-  console.log(`\n盲盒任务url:${url}\n`)
+  console.log(`\n女装盲盒url:${url}\n`)
   return new Promise(resolve => {
     $.get({
       url,
@@ -211,7 +205,7 @@ function taskUrl(function_id, body = '') {
       'Content-Type': 'application/json;charset=utf-8',
       'Origin': 'wq.jd.com',
       'User-Agent': 'JD4iPhone/167490 (iPhone; iOS 14.2; Scale/3.00)',
-      'Referer': `${jd_mhurl}?wxAppName=jd`,
+      'Referer': `${jd_nzmhurl}?wxAppName=jd`,
       'Cookie': cookie
     }
   }

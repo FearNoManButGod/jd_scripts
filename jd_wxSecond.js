@@ -1,14 +1,19 @@
 /*
 读秒拼手速通用活动
+
 第一个CK失效会退出脚本
+
 请求太频繁会被黑ip
+
 变量：
 //export jd_wxSecond_activityId="活动ID"
+
 cron:1 1 1 1 *
 ============Quantumultx===============
 [task_local]
 #读秒拼手速通用活动
 1 1 1 1 * jd_wxSecond.js, tag=读秒拼手速通用活动, enabled=true
+
 */
 
 const $ = new Env('读秒拼手速通用活动');
