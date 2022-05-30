@@ -59,9 +59,9 @@ if ($.isNode()) {
       $.ADID = getUUID("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", 1);
       $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
       authorCodeList = [
-        '8bb3954e8c2445c7a8fbcd05c5ab8f74',
-        '9c2945adfd1c41d6b9961be26f3a8c9a',
-        '0408ce92d6d549f88f372b395cc93a18',
+        'd28296411f0d458d8e4d8656d3834884',
+        'd28296411f0d458d8e4d8656d3834884',
+        'd28296411f0d458d8e4d8656d3834884',
       ];
       // $.authorCode = authorCodeList[random(0, authorCodeList.length)];
       $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
