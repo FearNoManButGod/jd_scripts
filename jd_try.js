@@ -96,7 +96,7 @@ let args_xh = {
      * 可设置环境变量：JD_TRY_TABID，用@进行分隔
      * 默认为 1 到 10
      * */
-    tabId: process.env.JD_TRY_TABID && process.env.JD_TRY_TABID.split('@').map(Number) || [1, 104, 3, 4, 5, 6, 7, 8, 9, 10],
+    tabId: process.env.JD_TRY_TABID && process.env.JD_TRY_TABID.split('@').map(Number) || [104, 3, 4, 5, 6, 7, 8, 9, 10],
     /*
      * 试用商品标题过滤，黑名单，当标题存在关键词时，则不加入试用组
      * 当白名单和黑名单共存时，黑名单会自动失效，优先匹配白名单，匹配完白名单后不会再匹配黑名单，望周知
@@ -390,7 +390,7 @@ function try_feedsList(tabId, page) {
                 } else {
                     data = JSON.parse(data)
                     let tempKeyword = ``;
-                    if (data.success) {
+                    if (data.data) {
                         $.nowPage === args_xh.totalPages ? $.nowPage = 1 : $.nowPage++;
                         console.log(`第 ${size++} 次获取试用商品成功，tabId:${args_xh.tabId[$.nowTabIdIndex]} 的 第 ${page}/${args_xh.totalPages} 页`)
                         console.log(`获取到商品 ${data.data.feedList.length} 条`)
@@ -567,7 +567,7 @@ function try_MyTrials(page, selected) {
                         if (selected === 2) {
                             if (data.success && data.data) {
                                 for (let item of data.data.list) {
-                                    item.status === 4 || item.text.text.includes('已放弃') ? $.giveupNum += 1 : ''
+                                    item.status === 4 || item.text.text.includes('试用资格已过期') ? $.giveupNum += 1 : ''
                                     item.status === 2 && item.text.text.includes('试用资格将保留') ? $.successNum += 1 : ''
                                     item.status === 2 && item.text.text.includes('请收货后尽快提交报告') ? $.getNum += 1 : ''
                                     item.status === 2 && item.text.text.includes('试用已完成') ? $.completeNum += 1 : ''
