@@ -6,6 +6,7 @@ new Env('发财挖宝');
 活动入口: 京东极速版 > 我的 > 发财挖宝
 最高可得总和为10元的微信零钱和红包
 脚本功能为: 挖宝，提现，没有助力功能，当血量剩余 1 时停止挖宝，领取奖励并提现 
+
 目前需要完成逛一逛任务并且下单任务才能通关，不做的话大概可得1.5～2块的微信零钱
 '''
 import os,json,random,time,re,string,functools,asyncio
@@ -400,7 +401,7 @@ def main():
         print(f'******开始【账号 {e}】 {get_pin(cookie)} *********\n')
         apDoTask(cookie)
         happyDigHome(cookie)
-        spring_reward_list(cookie)
+       # spring_reward_list(cookie)
 
 
 if __name__ == '__main__':
