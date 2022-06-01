@@ -1,5 +1,8 @@
+
+
 /*
 酒水会员盛典
+7 7 7 7 7 jd_lzdz1_customized612.js
 */
 const $ = new Env("酒水会员盛典");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
@@ -27,15 +30,13 @@ if ($.isNode()) {
     $.msg($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/bean/signIndex.action", { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
     return;
   }
-  // authorCodeList = await getAuthorCodeList('https://raw.githubusercontent.com/okyyds/duck/master/code/lzdz10.json')
-  // console.log(authorCodeList)
+  // authorCodeList = await getAuthorCodeList('https://raw.githubusercontent.com/okyyds/duck/master/code/lzdz1.json')
+  // // console.log(authorCodeList)
   // if ($.getAuthorCodeListerr === false) {
   //     authorCodeList = [
-  //       'f7d7bcdc4d3e408ea0a584f27f617e4b',
-  //       '78cd453ae0af483e8c7da5d3f8a857bd',
-  //       '40619ea93a2c42c3ae46a1e37111a7ea',
+  //       '76e59139225248f1b5d791bb473e3fe3'
   //     ]
-  // }
+ // }
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -60,14 +61,16 @@ if ($.isNode()) {
       $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
       authorCodeList = [
         '76e59139225248f1b5d791bb473e3fe3',
+        // '1582a55c4a8442d79819fd90e75b2d66',
+        // 'a3b625f7fcc14a3d84237c2543461f0c',
       ];
       // $.authorCode = authorCodeList[random(0, authorCodeList.length)];
       $.authorCode = ownCode ? ownCode : authorCodeList[random(0, authorCodeList.length)]
       $.authorNum = `${random(1000000, 9999999)}`;
       $.randomCode = random(1000000, 9999999);
-      $.activityId = "dz479899c4c94b59984be24e02bcb";
-      $.activityShopId = "1000088849";
-      $.activityUrl = `https://lzdz1-isv.isvjcloud.com/dingzhi/drinkcategory/piecetoge1/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=null&shopid=undefined&lng=00.000000&lat=00.000000&sid=&un_area=`;
+      $.activityId = "dz9466823d5b5e4bc589b07d35e6ac";
+      $.activityShopId = "1000097168";
+      $.activityUrl = `https://lzdz1-isv.isvjcloud.com/dingzhi/drinkcategory/piecetoge1/activity/${$.authorNum}?activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}&adsource=null&shareuserid4minipg=${encodeURIComponent($.secretPin)}&shopid=1000097168&lng=00.000000&lat=00.000000&sid=&un_area=`;
       await member();
       if ($.getFirstLZCKerr.indexOf('493') != -1) {
         break
@@ -108,6 +111,7 @@ async function member() {
       console.log("去助力 -> " + $.authorCode);
       await taskaccessLog("common/accessLogWithAD", `venderId=${$.activityShopId}&code=99&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=null`, 1);
       await task("wxActionCommon/getUserInfo", `pin=${encodeURIComponent($.secretPin)}`, 1);
+      // console.log(cookie)
       if ($.index === 1) {
         await task("drinkcategory/piecetoge1/activityContent", `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}&pinImg=&nick=${encodeURIComponent($.pin)}&cjyxPin=&cjhyPin=&shareUuid=${encodeURIComponent($.authorCode)}`, 0, 1);
       } else {
@@ -118,7 +122,7 @@ async function member() {
       await task("taskact/common/drawContent", `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`);
       await task("drinkcategory/piecetoge1/initOpenCard", `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}`);
       $.log("加入店铺会员");
-      if ($.openCardList && $.doFollowShop === true) {
+      if ($.openCardList) {
         taskList = [];
         $.openCardList.filter((x) => { if (!x.openStatus) { taskList.push(x) } })
         for (const vo of taskList) {
@@ -135,8 +139,6 @@ async function member() {
         }
         console.log("绑定助力");
         await task("drinkcategory/piecetoge1/initOpenCard", `pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&shareUuid=${encodeURIComponent($.authorCode)}`);
-      } else {
-        console.log("已关注店铺");
       }
       
       // console.log("去助力 -> " + $.authorCode);
@@ -161,8 +163,8 @@ async function member() {
       // await task('drinkcategory/piecetoge1/draw', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`);
       // await $.wait(2000)
       // await task('drinkcategory/piecetoge1/draw', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`);
-      // await $.wait(2000)
-      // await task('drinkcategory/piecetoge1/draw', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`);
+      await $.wait(2000)
+      await task('drinkcategory/piecetoge1/draw', `activityId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`);
       // console.log('100 -> ')
       // await getFirstLZCK()
       // await getToken();
@@ -335,7 +337,7 @@ function taskUrl(function_id, body, isCommon) {
       "User-Agent": `jdapp;iPhone;9.5.4;13.6;${$.UUID};network/wifi;ADID/${$.ADID};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
       Connection: "keep-alive",
       Referer: $.activityUrl,
-      Cookie: cookie,
+      Cookie: $.cookie,
     },
     body: body,
   };
@@ -451,6 +453,7 @@ function getFirstLZCK() {
               }
             }
           }
+          $.cookie = cookie
         } catch (error) {
           console.log(error);
         } finally {
