@@ -15,7 +15,7 @@ const $ = new Env("京乐玩");
 let MAIN_USER = 1; //要邀请的车头编号
 
 let qlHost = "127.0.0.1:5700"
-let scriptName = "FearNoManButGod_jd_scripts_jd_jinglewan"
+let scriptName = "jd_jinglewan"
 
 var fs = require("fs")
 let authFile = JSON.parse(fs.readFileSync("/ql/config/auth.json"))
@@ -281,8 +281,8 @@ class UserInfo {
         }
         await $.wait(SLEEP_TIME)
         
-        for(let files of fs.readdirSync(`/ql/log/${scriptName}`)) {
-            let fileName = `/ql/log/${scriptName}/${files}`
+        for(let files of fs.readdirSync(`/ql/log/FearNoManButGod_jd_scripts_jd_jinglewan`)) {
+            let fileName = `/ql/log/FearNoManButGod_jd_scripts_jd_jinglewan/${files}`
             let logFile = fs.statSync(fileName)
             let mtime = logFile.mtime.getTime()
             let nowtime = Date.now()
