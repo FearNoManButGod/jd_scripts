@@ -11,7 +11,7 @@ const WebSocket = require('ws');
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 $.accountCheck = true;
 $.init = false;
-$.bean = '1'; //兑换多少豆，默认是500
+$.bean = '500'; //兑换多少豆，默认是500
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {
