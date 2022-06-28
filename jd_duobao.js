@@ -5,7 +5,7 @@
 40,45 23 * * * jd_duobao.js, tag=京豆夺宝, enabled=true
 ================Loon==============
 [Script]
-cron "40,45 23 * * *" script-path=jd_duobao.js,tag=京豆夺宝
+cron "20,45 23 * * *" script-path=jd_duobao.js,tag=京豆夺宝
 */
 const {Env} = require('./utils/magic');
 const $ = new Env('M京豆夺宝');
@@ -319,5 +319,3 @@ async function verifyDomain(param = {}) {
     }
     return false;
 }
-
-

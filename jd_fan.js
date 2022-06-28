@@ -23,7 +23,7 @@ if ($.isNode()) {
         ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
 let activityList = [
-	{'id':'c88ffa4a17b04cc994a6e66f161471','endTime':1656626274000},//
+	{'id':'e41fd9ad50fa4dd28e0cb1c301eb29ef','endTime':1659196800000},//2022-06-07---2022-07-31 元気森林京东自营旗舰店
 ];
 !(async()=>{
 	activityList=getRandomArrayElements(activityList,activityList.length);
