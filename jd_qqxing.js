@@ -45,7 +45,7 @@ message = ""
 		let codeList = ['bf3ffb1c973a49acbac4983ac15162f3','be5c05485b624d69b2bb1acee71ffc87']
 		$.shareUuid = codeList[Math.floor((Math.random()*codeList.length))]
         //for (let i = 0; i <cookiesArr.length; i++) {
-		for (let i = 0; i < 7; i++) {
+		for (let i = 0; i < 1; i++) {
             cookie = cookiesArr[i];
             if (cookie) {
                 $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
